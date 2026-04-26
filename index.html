@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ScoreHaven Financial — Know Where Your Money Stands</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #00D68F;
+    --green-dark: #00A86B;
+    --yellow: #FFD166;
+    --ink: #0A0F1E;
+    --white: #FFFFFF;
+    --light-bg: #F7F9FC;
+    --border: #E4EAF2;
+    --text: #1A2333;
+    --muted: #4A5568;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--white); }
+  h1, h2, h3, h4 { font-family: 'Syne', sans-serif; font-weight: 800; }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,15,30,0.96); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 0 24px; height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; color: var(--white); }
+  .nav-logo span { color: var(--green); }
+  .nav-cta {
+    background: var(--green); color: var(--ink);
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px;
+    padding: 10px 20px; border-radius: 100px; text-decoration: none;
+    box-shadow: 0 0 20px rgba(0,214,143,0.3); transition: transform 0.2s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); }
+  .hero {
+    background: var(--ink); padding: 140px 24px 100px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(0,214,143,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-inner { position: relative; max-width: 740px; margin: 0 auto; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,214,143,0.1); color: var(--green);
+    font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 7px 16px; border-radius: 100px; border: 1px solid rgba(0,214,143,0.2); margin-bottom: 28px;
+  }
+  .hero-tag::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .hero h1 { font-size: clamp(34px,7vw,64px); color: var(--white); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 20px; }
+  .hero h1 span { color: var(--green); }
+  .hero p { font-size: clamp(15px,2.5vw,19px); color: #8A9BB5; line-height: 1.7; max-width: 520px; margin: 0 auto 40px; font-weight: 300; }
+  .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--green); color: var(--ink);
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px;
+    padding: 16px 32px; border-radius: 100px; text-decoration: none;
+    box-shadow: 0 0 32px rgba(0,214,143,0.35); transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(0,214,143,0.5); }
+  .btn-secondary {
+    background: rgba(255,255,255,0.06); color: var(--white);
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px;
+    padding: 16px 32px; border-radius: 100px; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.12); transition: background 0.2s;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+  .hero-preview { margin-top: 64px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .score-pill {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; padding: 16px 18px; text-align: center; min-width: 105px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .score-pill:nth-child(1){animation-delay:0.1s} .score-pill:nth-child(2){animation-delay:0.2s}
+  .score-pill:nth-child(3){animation-delay:0.3s} .score-pill:nth-child(4){animation-delay:0.4s}
+  .score-pill:nth-child(5){animation-delay:0.5s}
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .sp-emoji { font-size: 18px; margin-bottom: 6px; }
+  .sp-label { font-size: 10px; color: #8A9BB5; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .sp-score { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; }
+  .section { padding: 80px 24px; }
+  .section-inner { max-width: 780px; margin: 0 auto; }
+  .section-tag {
+    display: inline-block; background: rgba(0,168,107,0.08); color: var(--green-dark);
+    font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 100px; border: 1px solid rgba(0,168,107,0.15); margin-bottom: 16px;
+  }
+  .section h2 { font-size: clamp(26px,5vw,40px); line-height: 1.1; margin-bottom: 16px; color: var(--ink); }
+  .section h2 span { color: var(--green-dark); }
+  .section .lead { color: var(--muted); font-size: 15px; line-height: 1.8; max-width: 580px; margin-bottom: 40px; }
+  .what-is {
+    background: var(--light-bg); border: 1px solid var(--border);
+    border-radius: 24px; padding: 40px; margin-top: 16px;
+  }
+  .what-is p { font-size: 16px; line-height: 1.8; color: var(--muted); }
+  .what-is p strong { color: var(--text); font-weight: 500; }
+  .who-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .who-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 18px; padding: 24px;
+    display: flex; align-items: flex-start; gap: 14px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .who-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
+  .who-icon { font-size: 28px; flex-shrink: 0; }
+  .who-card h3 { font-size: 15px; margin-bottom: 6px; color: var(--ink); }
+  .who-card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .get-section { background: var(--ink); padding: 80px 24px; }
+  .get-inner { max-width: 780px; margin: 0 auto; }
+  .get-inner .section-tag { background: rgba(0,214,143,0.1); color: var(--green); border-color: rgba(0,214,143,0.2); }
+  .get-inner h2 { color: var(--white); margin-bottom: 16px; font-size: clamp(26px,5vw,40px); }
+  .get-inner .lead { color: #8A9BB5; margin-bottom: 40px; }
+  .get-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .get-card {
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px; padding: 22px; transition: background 0.2s;
+  }
+  .get-card:hover { background: rgba(255,255,255,0.07); }
+  .get-icon { font-size: 26px; margin-bottom: 12px; }
+  .get-card h3 { font-size: 15px; color: var(--white); margin-bottom: 6px; }
+  .get-card p { font-size: 13px; color: #8A9BB5; line-height: 1.6; }
+  .steps { display: flex; flex-direction: column; gap: 14px; }
+  .step {
+    display: flex; gap: 20px; align-items: flex-start;
+    background: var(--light-bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 24px; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .step:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.06); }
+  .step-num {
+    width: 44px; height: 44px; border-radius: 14px;
+    background: var(--ink); color: var(--green);
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .step-content h3 { font-size: 17px; margin-bottom: 6px; color: var(--ink); }
+  .step-content p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .sample-section { background: var(--light-bg); padding: 80px 24px; }
+  .sample-inner { max-width: 600px; margin: 0 auto; text-align: center; }
+  .sample-inner h2 { font-size: clamp(26px,5vw,40px); margin-bottom: 16px; }
+  .sample-card {
+    background: var(--ink); border-radius: 24px; padding: 40px;
+    position: relative; overflow: hidden;
+  }
+  .sample-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,214,143,0.1) 0%, transparent 65%);
+  }
+  .sample-inner-card { position: relative; }
+  .sample-name { color: #8A9BB5; font-size: 13px; margin-bottom: 20px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .sample-score-big { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 80px; color: var(--green); line-height: 1; text-shadow: 0 0 40px rgba(0,214,143,0.4); }
+  .sample-score-denom { font-size: 20px; color: #8A9BB5; margin-bottom: 8px; }
+  .sample-status { color: var(--white); font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+  .sample-sub { color: #8A9BB5; font-size: 13px; margin-bottom: 28px; }
+  .sample-bars { display: flex; flex-direction: column; gap: 10px; text-align: left; }
+  .sample-bar-row { display: flex; align-items: center; gap: 12px; }
+  .sample-bar-label { font-size: 12px; color: #8A9BB5; min-width: 120px; }
+  .sample-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 100px; overflow: hidden; }
+  .sample-bar-fill { height: 100%; border-radius: 100px; }
+  .sample-bar-score { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14px; min-width: 28px; text-align: right; }
+  .price-section { padding: 80px 24px; }
+  .price-inner { max-width: 500px; margin: 0 auto; text-align: center; }
+  .price-card {
+    background: var(--white); border: 2px solid var(--green-dark);
+    border-radius: 24px; padding: 40px 32px;
+    box-shadow: 0 8px 48px rgba(0,168,107,0.12); position: relative; overflow: hidden;
+  }
+  .price-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--green-dark), var(--green));
+  }
+  .price-badge {
+    display: inline-block; background: rgba(0,168,107,0.08); color: var(--green-dark);
+    font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 100px; border: 1px solid rgba(0,168,107,0.2); margin-bottom: 20px;
+  }
+  .price-amount { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 72px; line-height: 1; color: var(--ink); }
+  .price-amount sup { font-size: 28px; vertical-align: super; }
+  .price-note { color: var(--muted); font-size: 14px; margin: 8px 0 28px; }
+  .price-includes { text-align: left; margin-bottom: 32px; display: flex; flex-direction: column; gap: 12px; }
+  .price-item { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text); }
+  .price-item::before { content: '✓'; color: var(--green-dark); font-weight: 800; font-size: 16px; flex-shrink: 0; }
+  .price-btn {
+    display: block; width: 100%; background: var(--ink); color: var(--white);
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px;
+    padding: 18px; border-radius: 14px; text-decoration: none; text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 20px rgba(10,15,30,0.2);
+  }
+  .price-btn:hover { transform: translateY(-2px); }
+  .faq-section { background: var(--light-bg); padding: 80px 24px; }
+  .faq-inner { max-width: 640px; margin: 0 auto; }
+  .faq-inner h2 { font-size: clamp(24px,4vw,36px); margin-bottom: 32px; text-align: center; }
+  .faq-item { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; margin-bottom: 12px; }
+  .faq-q { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 15px; margin-bottom: 8px; color: var(--ink); }
+  .faq-a { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .final-cta {
+    background: var(--ink); padding: 100px 24px; text-align: center; position: relative; overflow: hidden;
+  }
+  .final-cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 60% at 50% 100%, rgba(0,214,143,0.1) 0%, transparent 65%);
+  }
+  .final-inner { position: relative; max-width: 580px; margin: 0 auto; }
+  .final-cta h2 { font-size: clamp(30px,6vw,50px); color: var(--white); line-height: 1.05; margin-bottom: 16px; }
+  .final-cta h2 span { color: var(--green); }
+  .final-cta p { color: #8A9BB5; font-size: 16px; line-height: 1.7; margin-bottom: 36px; font-weight: 300; }
+  footer {
+    background: #060A14; padding: 28px 24px; text-align: center;
+    font-size: 12px; color: #4A5568; border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  footer span { color: var(--green); }
+  @media (max-width: 600px) {
+    .get-grid { grid-template-columns: 1fr; }
+    .who-grid { grid-template-columns: 1fr; }
+    .hero-preview { gap: 10px; }
+    .score-pill { min-width: 88px; padding: 12px; }
+    .what-is { padding: 24px; }
+    .sample-bar-label { min-width: 90px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">ScoreHaven <span>Financial</span></div>
+  <a href="#get-started" class="nav-cta">Get My Score →</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Financial Health Scoring</div>
+    <h1>Know exactly where<br>your <span>money stands.</span></h1>
+    <p>Get a personalized financial health report that shows your risks, strengths, and next steps — delivered in 48 hours.</p>
+    <div class="hero-btns">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfe1fvDHYq-VxQ5WF93mNJhsB1-x_pggwUkpmIEjEUVEzf-WQ/viewform?usp=header" class="btn-primary">Get My Financial Audit →</a>
+      <a href="#how-it-works" class="btn-secondary">See How It Works</a>
+    </div>
+    <div class="hero-preview">
+      <div class="score-pill"><div class="sp-emoji">💰</div><div class="sp-label">Income</div><div class="sp-score" style="color:#00D68F">92</div></div>
+      <div class="score-pill"><div class="sp-emoji">🏦</div><div class="sp-label">Savings</div><div class="sp-score" style="color:#FFD166">65</div></div>
+      <div class="score-pill"><div class="sp-emoji">💳</div><div class="sp-label">Debt</div><div class="sp-score" style="color:#FFD166">58</div></div>
+      <div class="score-pill"><div class="sp-emoji">📊</div><div class="sp-label">Budget</div><div class="sp-score" style="color:#FFD166">70</div></div>
+      <div class="score-pill"><div class="sp-emoji">📈</div><div class="sp-label">Retirement</div><div class="sp-score" style="color:#00D68F">85</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="section-tag">What Is ScoreHaven</div>
+    <h2>Your financial health,<br><span>finally made clear.</span></h2>
+    <p class="lead">Most people work hard but still feel lost about their money. ScoreHaven Financial changes that.</p>
+    <div class="what-is">
+      <p>ScoreHaven Financial is a <strong>personal financial health audit</strong> built for everyday people. We look at your real numbers — your income, debt, savings, spending habits, and financial risks — and turn it all into a clear, personalized score with a real action plan. No confusing apps. No bank logins. No judgment. Just <strong>clarity on where you stand and exactly what to do next.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="section-inner">
+    <div class="section-tag">Who This Helps</div>
+    <h2>Built for <span>real people.</span></h2>
+    <p class="lead">Not just the wealthy. Not just investors. Anyone who wants to understand their money better.</p>
+    <div class="who-grid">
+      <div class="who-card"><div class="who-icon">💼</div><div><h3>Working Professionals</h3><p>You have income but feel like money disappears every month and you don't know where it goes.</p></div></div>
+      <div class="who-card"><div class="who-icon">💳</div><div><h3>People Managing Debt</h3><p>Credit cards, car notes, student loans — you want a real plan to get out from under it fast.</p></div></div>
+      <div class="who-card"><div class="who-icon">👨‍👩‍👧</div><div><h3>Families Building Savings</h3><p>You're trying to build something solid for your family but don't know the right first steps.</p></div></div>
+      <div class="who-card"><div class="who-icon">🎯</div><div><h3>Anyone Wanting Clarity</h3><p>You just want to know where you actually stand — no fluff, no sales pitch, just the truth.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="get-section">
+  <div class="get-inner">
+    <div class="section-tag">What You Get</div>
+    <h2 style="color:white">Everything you need.<br>One report.</h2>
+    <p class="lead">This isn't a generic calculator. It's a personalized breakdown built specifically for your situation.</p>
+    <div class="get-grid">
+      <div class="get-card"><div class="get-icon">🎯</div><h3>Financial Health Score</h3><p>A clear score out of 100 so you know exactly where you stand — not a guess.</p></div>
+      <div class="get-card"><div class="get-icon">📋</div><h3>Personalized Action Plan</h3><p>Real steps built around your specific situation. Not generic advice you've heard before.</p></div>
+      <div class="get-card"><div class="get-icon">💳</div><h3>Debt Payoff Guidance</h3><p>A clear strategy to attack your debt faster and stop wasting money on interest.</p></div>
+      <div class="get-card"><div class="get-icon">🏦</div><h3>Savings Targets</h3><p>Exactly how much you should be saving and where — emergency fund, retirement, and beyond.</p></div>
+      <div class="get-card"><div class="get-icon">⚠️</div><h3>Financial Risk Alerts</h3><p>The exact gaps costing you money every month — clearly explained in plain English.</p></div>
+      <div class="get-card"><div class="get-icon">📊</div><h3>Category Breakdown</h3><p>Scored individually across Income, Savings, Debt, Budgeting, and Retirement.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how-it-works">
+  <div class="section-inner">
+    <div class="section-tag">How It Works</div>
+    <h2>Three steps.<br><span>Total clarity.</span></h2>
+    <p class="lead">Simple, fast, and personal. No confusing apps. No sales pitch. Just real answers.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-content"><h3>Answer a Few Financial Questions</h3><p>Fill out a short 3 minute form about your income, expenses, debt, and savings. Nothing invasive — no bank logins, no social security number.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content"><h3>We Analyze Your Financial Data</h3><p>A real person with 7+ years in insurance and risk management personally reviews your situation and builds your custom report from scratch.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content"><h3>You Receive Your Personalized Report</h3><p>Within 48 hours you get a beautifully designed Financial Health Score report with your overall score, breakdown, strengths, risks, and a 90-day plan.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sample-section">
+  <div class="sample-inner">
+    <div class="section-tag">Sample Result</div>
+    <h2>Here's what your report looks like.</h2>
+    <p style="color:var(--muted);font-size:14px;margin:0 auto 32px;line-height:1.7">Real scores. Real breakdown. Built for your exact situation.</p>
+    <div class="sample-card">
+      <div class="sample-inner-card">
+        <div class="sample-name">Sample Client · Financial Health Report</div>
+        <div class="sample-score-big">78</div>
+        <div class="sample-score-denom">/ 100</div>
+        <div class="sample-status">Strong Foundation</div>
+        <div class="sample-sub">Debt pressure present — but you're positioned to improve fast.</div>
+        <div class="sample-bars">
+          <div class="sample-bar-row"><div class="sample-bar-label">💰 Income</div><div class="sample-bar-track"><div class="sample-bar-fill" style="width:92%;background:#00D68F"></div></div><div class="sample-bar-score" style="color:#00D68F">92</div></div>
+          <div class="sample-bar-row"><div class="sample-bar-label">🏦 Savings</div><div class="sample-bar-track"><div class="sample-bar-fill" style="width:65%;background:#FFD166"></div></div><div class="sample-bar-score" style="color:#FFD166">65</div></div>
+          <div class="sample-bar-row"><div class="sample-bar-label">💳 Debt</div><div class="sample-bar-track"><div class="sample-bar-fill" style="width:58%;background:#FFD166"></div></div><div class="sample-bar-score" style="color:#FFD166">58</div></div>
+          <div class="sample-bar-row"><div class="sample-bar-label">📊 Budgeting</div><div class="sample-bar-track"><div class="sample-bar-fill" style="width:70%;background:#FFD166"></div></div><div class="sample-bar-score" style="color:#FFD166">70</div></div>
+          <div class="sample-bar-row"><div class="sample-bar-label">📈 Retirement</div><div class="sample-bar-track"><div class="sample-bar-fill" style="width:85%;background:#00D68F"></div></div><div class="sample-bar-score" style="color:#00D68F">85</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="price-section" id="get-started">
+  <div class="price-inner">
+    <div class="section-tag">Simple Pricing</div>
+    <h2>One price.<br>Zero confusion.</h2>
+    <p style="color:var(--muted);font-size:15px;margin:0 auto 32px;line-height:1.8">No subscription. No upsell. Just your report.</p>
+    <div class="price-card">
+      <div class="price-badge">Financial Health Score Report</div>
+      <div class="price-amount"><sup>$</sup>27</div>
+      <p class="price-note">One time · Delivered within 48 hours</p>
+      <div class="price-includes">
+        <div class="price-item">Full personalized Financial Health Score</div>
+        <div class="price-item">Score across 5 categories</div>
+        <div class="price-item">Financial risk alerts</div>
+        <div class="price-item">Debt payoff guidance</div>
+        <div class="price-item">Savings targets</div>
+        <div class="price-item">90-day personalized action plan</div>
+        <div class="price-item">Beautifully designed PDF report</div>
+      </div>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfe1fvDHYq-VxQ5WF93mNJhsB1-x_pggwUkpmIEjEUVEzf-WQ/viewform?usp=header" class="price-btn">Get My Financial Audit →</a>
+    </div>
+  </div>
+</section>
+
+<section class="faq-section">
+  <div class="faq-inner">
+    <h2>Questions? We got you.</h2>
+    <div class="faq-item"><div class="faq-q">Is my information safe?</div><div class="faq-a">Absolutely. We never ask for bank logins, social security numbers, or any sensitive personal information. Just general numbers about your financial situation.</div></div>
+    <div class="faq-item"><div class="faq-q">Is this the same as a credit score?</div><div class="faq-a">No — and that's the point. Your credit score only tells lenders about your debt history. Your Financial Health Score looks at your full picture — income, savings, debt, budgeting habits, and retirement. It's a much more complete and useful number.</div></div>
+    <div class="faq-item"><div class="faq-q">Are you a financial advisor?</div><div class="faq-a">We're not a licensed financial advisor. ScoreHaven Financial provides financial education and clarity — we help you understand your situation and give you a personalized action plan. Think of it as a knowledgeable friend who actually looked at your numbers.</div></div>
+    <div class="faq-item"><div class="faq-q">How do I pay?</div><div class="faq-a">After you submit the form you'll receive secure payment instructions. We accept all major cards. Simple and fast.</div></div>
+    <div class="faq-item"><div class="faq-q">When will I get my report?</div><div class="faq-a">Within 48 hours of payment confirmation. Your report is personally reviewed and built — not auto-generated — so we take the time to get it right.</div></div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="final-inner">
+    <h2>Stop guessing.<br><span>Start knowing.</span></h2>
+    <p>Most people go their whole lives without really understanding their financial health. For $27 you can change that today.</p>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfe1fvDHYq-VxQ5WF93mNJhsB1-x_pggwUkpmIEjEUVEzf-WQ/viewform?usp=header" class="btn-primary" style="font-size:16px;padding:18px 36px;">Get My Financial Audit →</a>
+  </div>
+</section>
+
+<footer>
+  © 2026 <span>ScoreHaven Financial</span> · Financial education and clarity for everyday people · Not a licensed financial advisor
+</footer>
+
+</body>
+</html>
