@@ -124,7 +124,7 @@
   .field { display: flex; flex-direction: column; gap: 7px; }
   .field label {
     font-size: 12px; font-weight: 500; color: var(--muted);
-    letter-spacing: 0.06em; text-transform: uppercase;
+    letter-spacing: 0.06em; text-trans: uppercase;
   }
   .field label .req { color: var(--green); margin-left: 2px; }
 
@@ -190,7 +190,7 @@
   .divider { height: 1px; background: rgba(255,255,255,0.05); margin: 0 32px; }
 
   /* NAV */
-  .form-nav {
+  .-nav {
     padding: 20px 32px 28px;
     display: flex; justify-content: space-between; align-items: center;
   }
@@ -210,8 +210,8 @@
     cursor: pointer; transition: all 0.2s;
     box-shadow: 0 0 20px rgba(0,214,143,0.25);
   }
-  .btn-next:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(0,214,143,0.4); }
-  .btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-next:hover { trans: translateY(-1px); box-shadow: 0 4px 24px rgba(0,214,143,0.4); }
+  .btn-next:disabled { opacity: 0.4; cursor: not-allowed; trans: none; }
 
   /* PAYMENT SCREEN */
   .payment-screen { padding: 32px; display: none; }
@@ -244,7 +244,7 @@
     box-shadow: 0 0 28px rgba(0,214,143,0.3);
     margin-bottom: 12px;
   }
-  .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(0,214,143,0.45); }
+  .btn-pay:hover { trans: translateY(-2px); box-shadow: 0 8px 36px rgba(0,214,143,0.45); }
   .pay-guarantee {
     display: flex; align-items: center; justify-content: center; gap: 6px;
     font-size: 13px; color: var(--muted); padding: 12px;
@@ -255,7 +255,7 @@
   /* SUCCESS SCREEN */
   .success-screen { padding: 48px 32px; text-align: center; display: none; }
   .success-icon { font-size: 56px; margin-bottom: 20px; animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
-  @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes popIn { from { trans: scale(0); opacity: 0; } to { trans: scale(1); opacity: 1; } }
   .success-screen h2 {
     font-family: 'Bricolage Grotesque', sans-serif;
     font-weight: 800; font-size: 28px; margin-bottom: 12px;
@@ -263,11 +263,11 @@
   .success-screen p { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 360px; margin: 0 auto; }
 
   /* ANIMATIONS */
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; trans: translateY(20px); } to { opacity: 1; trans: translateY(0); } }
+  @keyframes fadeDown { from { opacity: 0; trans: translateY(-10px); } to { opacity: 1; trans: translateY(0); } }
 
   @media (max-width: 480px) {
-    .section-header, .fields, .form-nav { padding-left: 20px; padding-right: 20px; }
+    .section-header, .fields, .-nav { padding-left: 20px; padding-right: 20px; }
     .divider { margin: 0 20px; }
     .field-row { grid-template-columns: 1fr; }
     .payment-screen, .success-screen { padding: 24px 20px; }
@@ -285,7 +285,7 @@
     <div class="brand-name">Score<span>Haven</span> Financial</div>
     <div class="header-tag">Financial Health Audit — $47</div>
     <h1>Let's build your<br><span>personalized report.</span></h1>
-    <p>This isn't just a form. This is the first step toward real financial clarity. Fill it out honestly and We'll build something personally for you.</p>
+    <p>This isn't just a . This is the first step toward real financial clarity. Fill it out honestly and We'll build something personally for you.</p>
   </div>
 
   <!-- PROGRESS -->
@@ -303,7 +303,7 @@
     </div>
   </div>
 
-  <div class="form-card">
+  <div class="-card">
 
     <!-- SECTION 1: PERSONAL INFO -->
     <div id="section-1">
@@ -352,7 +352,7 @@
         </div>
       </div>
       <div class="divider"></div>
-      <div class="form-nav">
+      <div class="-nav">
         <div></div>
         <button class="btn-next" onclick="nextSection(1)">Next →</button>
       </div>
@@ -417,7 +417,7 @@
         </div>
       </div>
       <div class="divider"></div>
-      <div class="form-nav">
+      <div class="-nav">
         <button class="btn-back" onclick="prevSection(2)">← Back</button>
         <button class="btn-next" onclick="nextSection(2)">Next →</button>
       </div>
@@ -478,7 +478,7 @@
         </div>
       </div>
       <div class="divider"></div>
-      <div class="form-nav">
+      <div class="-nav">
         <button class="btn-back" onclick="prevSection(3)">← Back</button>
         <button class="btn-next" onclick="nextSection(3)">Next →</button>
       </div>
@@ -526,7 +526,7 @@
         </div>
       </div>
       <div class="divider"></div>
-      <div class="form-nav">
+      <div class="-nav">
         <button class="btn-back" onclick="prevSection(4)">← Back</button>
         <button class="btn-next" onclick="nextSection(4)">Next →</button>
       </div>
@@ -835,25 +835,93 @@
     };
 
     // Send to Formspree FIRST then redirect to Stripe
-    fetch('https://formspree.io/f/xbdwvywv', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }).then(() => {
-      console.log('Form submitted successfully');
-      window.location.href = 'https://buy.stripe.com/8x214m1xI2NR4pjc2abZe01';
-    }).catch(err => {
-      console.log('Submission error but continuing to Stripe:', err);
-      window.location.href = 'https://buy.stripe.com/8x214m1xI2NR4pjc2abZe01';
-    });
+<form
+  action="https://formspree.io/f/xbdwvywv"
+  method="POST"
+  id="audit-form"
+>
+
+  <!-- NAME -->
+  <div class="form-group">
+    <label>Full Name</label>
+    <input
+      type="text"
+      name="full_name"
+      placeholder="Your full name"
+      required
+    />
+  </div>
+
+  <!-- EMAIL -->
+  <div class="form-group">
+    <label>Email Address</label>
+    <input
+      type="email"
+      name="email"
+      placeholder="you@example.com"
+      required
+    />
+  </div>
+
+  <!-- MONTHLY INCOME -->
+  <div class="form-group">
+    <label>Monthly Income</label>
+    <input
+      type="text"
+      name="monthly_income"
+      placeholder="$4,000"
+    />
+  </div>
+
+  <!-- DEBT -->
+  <div class="form-group">
+    <label>Total Debt</label>
+    <input
+      type="text"
+      name="total_debt"
+      placeholder="$15,000"
+    />
+  </div>
+
+  <!-- GOALS -->
+  <div class="form-group">
+    <label>Financial Goals</label>
+    <textarea
+      name="financial_goals"
+      placeholder="Pay off debt, save for a house, improve budgeting..."
+      rows="5"
+    ></textarea>
+  </div>
+
+  <!-- SUBMIT -->
+  <button type="submit" class="submit-btn">
+    Get My Financial Audit →
+  </button>
+
+</form>
+
+<!-- SUCCESS SCRIPT -->
+<script>
+const form = document.getElementById('audit-form');
+
+form.addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const data = new FormData(form);
+
+  const response = await fetch(form.action, {
+    method: 'POST',
+    body: data,
+    headers: {
+      'Accept': 'application/json'
+    }
+  });
+
+  if (response.ok) {
+    alert('Your audit request was submitted successfully!');
+    form.reset();
+  } else {
+    alert('Something went wrong. Please try again.');
   }
+});
 </script>
-
-<!-- HELP BAR -->
-<div style="background:#0A0F1E;border-top:1px solid rgba(255,255,255,0.06);padding:10px 24px;text-align:center;font-size:13px;color:#6B8099;position:fixed;bottom:0;left:0;right:0;z-index:999;">
-  Questions? Email us at <a href="mailto:hello@scorehavenfinancial.com" style="color:#00D68F;font-weight:600;text-decoration:none;">hello@scorehavenfinancial.com</a> &nbsp;·&nbsp; We respond within 24 hours
-</div>
-<div style="height:44px"></div>
-
-</body>
-</html>
