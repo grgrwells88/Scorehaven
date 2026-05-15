@@ -122,45 +122,71 @@
     margin-bottom: 24px; line-height: 1.5;
   }
 
-  /* OPTIONS */
-  .options { display: flex; flex-direction: column; gap: 10px; }
-  .option {
-    display: flex; align-items: center; gap: 14px;
-    background: rgba(255,255,255,0.03);
-    border: 1.5px solid rgba(255,255,255,0.08);
-    border-radius: 14px; padding: 14px 18px;
-    cursor: pointer; transition: all 0.2s;
-    font-size: 14px; color: #A8B8CC;
-    font-weight: 400;
-  }
-  .option:hover {
-    border-color: rgba(0,214,143,0.4);
-    background: rgba(0,214,143,0.05);
-    color: var(--white);
-    transform: translateX(4px);
-  }
-  .option.selected {
-    border-color: var(--green);
-    background: rgba(0,214,143,0.08);
-    color: var(--white);
-  }
-  .option-dot {
-    width: 18px; height: 18px; border-radius: 50%;
-    border: 2px solid rgba(255,255,255,0.15);
-    flex-shrink: 0; transition: all 0.2s;
-    background: transparent;
-  }
-  .option.selected .option-dot {
-    border-color: var(--green);
-    background: var(--green);
-    box-shadow: 0 0 8px rgba(0,214,143,0.5);
-  }
-  .option-points {
-    margin-left: auto; font-size: 12px;
-    color: var(--muted); flex-shrink: 0;
-    font-weight: 500;
-  }
-  .option.selected .option-points { color: var(--green); }
+ /* OPTIONS */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option {
+  user-select: none;
+  -webkit-user-select: none;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  background: rgba(255,255,255,0.03);
+  border: 1.5px solid rgba(255,255,255,0.08);
+
+  border-radius: 14px;
+  padding: 14px 18px;
+
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  font-size: 14px;
+  color: #A8B8CC;
+  font-weight: 400;
+}
+
+.option:hover {
+  border-color: rgba(0,214,143,0.4);
+  background: rgba(0,214,143,0.05);
+  color: var(--white);
+  transform: translateX(4px);
+}
+
+.option.selected {
+  border-color: var(--green);
+  background: rgba(0,214,143,0.08);
+  color: var(--white);
+}
+
+.option-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  flex-shrink: 0;
+  transition: all 0.2s;
+  background: transparent;
+}
+
+.option-points {
+  margin-left: auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+  opacity: 0.9;
+}
+
+.option.selected .option-dot {
+  border-color: var(--green);
+  background: var(--green);
+  box-shadow: 0 0 8px rgba(0,214,143,0.5);
+}
 
   /* NAV */
   .quiz-nav {
@@ -192,7 +218,6 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 24px rgba(0,214,143,0.4);
   }
-
   /* INTRO SCREEN */
   #intro-screen { text-align: center; padding: 48px 32px; }
   #intro-screen h1 {
@@ -210,11 +235,15 @@
     margin-bottom: 32px; flex-wrap: wrap;
   }
   .intro-stat {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-radius: 12px; padding: 12px 20px;
-    font-size: 13px; color: #8A9BB5;
-    display: flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-size: 13px;
+  color: #8A9BB5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   }
   .intro-stat strong { color: var(--white); font-weight: 600; }
   .btn-start {
@@ -455,19 +484,45 @@
     border-radius: 12px;
   }
   @media screen and (max-width: 768px) {
-    .quiz-card { border-radius: 16px; margin: 0 4px; }
-    .option { padding: 14px 16px; font-size: 14px; }
-    .question-area { padding: 20px 16px 20px; }
-    .quiz-header { padding: 20px 16px 0; }
-    .quiz-nav { padding: 0 16px 20px; }
-    #intro-screen, #results-screen { padding: 28px 16px; }
-    .btn-start { padding: 16px; font-size: 15px; }
-    .btn-next, .btn-back { padding: 13px 20px; }
-    .email-row { flex-direction: column; }
-    .email-row button { width: 100%; }
-    .cat-breakdown { gap: 8px; }
-    .sample-bar-label { min-width: 80px; font-size: 11px; }
+  .question-area {
+    padding: 20px 16px 20px;
   }
+
+  .quiz-header {
+    padding: 20px 16px 0;
+  }
+
+  .quiz-nav {
+    padding: 0 16px 20px;
+  }
+
+  #intro-screen,
+  #results-screen {
+    padding: 28px 16px;
+  }
+
+  .btn-start {
+    padding: 16px;
+    font-size: 15px;
+  }
+
+  .btn-next,
+  .btn-back {
+    padding: 13px 20px;
+  }
+
+  .email-row {
+    flex-direction: column;
+  }
+
+  .email-row button {
+    width: 100%;
+  }
+
+  .cat-breakdown {
+    gap: 8px;
+  }
+}
 
 </style>
 </head>
@@ -672,10 +727,11 @@ function renderQuestion() {
   q.options.forEach((opt, i) => {
     const div = document.createElement('div');
     div.className = 'option' + (answers[currentQ] === i ? ' selected' : '');
-    div.innerHTML = `
-      <div class="option-dot"></div>
-      <span>${opt.text}</span>
-    `;
+div.innerHTML = `
+  <div class="option-dot"></div>
+  <span>${opt.text}</span>
+  <div class="option-points">+${opt.points}</div>
+`;
     div.onclick = () => selectOption(i);
     container.appendChild(div);
   });
@@ -685,306 +741,183 @@ function renderQuestion() {
 
 function selectOption(i) {
   answers[currentQ] = i;
+
   document.querySelectorAll('.option').forEach((el, idx) => {
     el.classList.toggle('selected', idx === i);
   });
+
   updateNextBtn();
 }
 
-function updateNextBtn() {
-  const btn = document.getElementById('btn-next');
-  if (answers[currentQ] !== null) {
-    btn.classList.add('active');
-  } else {
-    btn.classList.remove('active');
+function getPersonality(score) {
+  if (score >= 85) {
+    return {
+      emoji: "🏆",
+      title: "The Wealth Builder",
+      desc: "You're financially disciplined and already building strong long-term habits."
+    };
   }
-}
 
-function nextQuestion() {
-  if (answers[currentQ] === null) return;
-  if (currentQ < questions.length - 1) {
-    currentQ++;
-    renderQuestion();
-  } else {
-    showResults();
+  if (score >= 70) {
+    return {
+      emoji: "💪",
+      title: "The Momentum Maker",
+      desc: "You're on the right track financially and building a solid foundation."
+    };
   }
-}
 
-function prevQuestion() {
-  if (currentQ > 0) {
-    currentQ--;
-    renderQuestion();
+  if (score >= 55) {
+    return {
+      emoji: "📈",
+      title: "The Rebuilder",
+      desc: "You have potential, but a few key adjustments could dramatically improve your finances."
+    };
   }
-}
 
-function getColor(score) {
-  if (score >= 75) return '#00D68F';
-  if (score >= 50) return '#FFD166';
-  return '#FF6B6B';
-}
+  if (score >= 40) {
+    return {
+      emoji: "⚠️",
+      title: "The Stretched Planner",
+      desc: "Your finances need structure and consistency to reduce stress and build momentum."
+    };
+  }
 
-function getLabel(score) {
-  if (score >= 85) return 'Excellent Shape 🏆';
-  if (score >= 70) return 'Strong Foundation 💪';
-  if (score >= 55) return 'Room To Grow 📈';
-  if (score >= 40) return 'Needs Attention ⚠️';
-  return 'Time To Act 🚨';
-}
-
-function getSub(score) {
-  if (score >= 85) return "You're doing great. A few tweaks could make things even stronger.";
-  if (score >= 70) return "Solid foundation. Some areas need attention to really unlock your potential.";
-  if (score >= 55) return "You have something to work with. The right moves now will change your trajectory.";
-  if (score >= 40) return "There are real gaps that are costing you money. A clear plan is what's missing.";
-  return "This is your wake-up call. The good news — you now know where to start.";
+  return {
+    emoji: "🚨",
+    title: "The Financial Reset",
+    desc: "You're under pressure financially, but this is the perfect time to rebuild smarter."
+  };
 }
 
 function showResults() {
+
   document.getElementById('progress-fill').style.width = '100%';
+
   document.getElementById('quiz-header').style.display = 'none';
   document.getElementById('question-area').style.display = 'none';
   document.getElementById('quiz-nav').style.display = 'none';
 
-  // Calculate total score using ratio method
   let total = 0;
   let maxTotal = 0;
+
   questions.forEach((q, i) => {
-    if (answers[i] !== null) {
-      const maxPoints = Math.max(...q.options.map(o => o.points));
-      const earnedRatio = q.options[answers[i]].points / maxPoints;
-      total += earnedRatio * q.weight;
+    const selected = answers[i];
+
+    if (selected !== null) {
+      total += q.options[selected].points;
     }
+
     maxTotal += q.weight;
   });
+
   const score = Math.round((total / maxTotal) * 100);
 
-  // Category scores
-  const cats = {
-    income: { label: '💰 Income & Cash Flow', max: 25, earned: 0 },
-    savings: { label: '🏦 Emergency Savings', max: 15, earned: 0 },
-    debt: { label: '💳 Debt Management', max: 20, earned: 0 },
-    budget: { label: '📊 Budgeting Habits', max: 15, earned: 0 },
-    retirement: { label: '📈 Retirement', max: 10, earned: 0 },
-    behavior: { label: '🧠 Financial Behavior', max: 15, earned: 0 }
-  };
-
-  questions.forEach((q, i) => {
-    if (answers[i] !== null && cats[q.category]) {
-      cats[q.category].earned += q.options[answers[i]].points;
-    }
-  });
-
-  // Find lowest and highest categories for personalized diagnosis
-  const catScores = {};
-  Object.entries(cats).forEach(([key, c]) => {
-    catScores[key] = Math.round((c.earned / c.max) * 100);
-  });
-  const lowestCategory = Object.entries(catScores).sort((a,b) => a[1]-b[1])[0][0];
-  const highestCategory = Object.entries(catScores).sort((a,b) => b[1]-a[1])[0][0];
-
-  const diagnosisMap = {
-    debt: "Your biggest financial drag right now is debt load. Reducing monthly obligations could free up serious cash flow fast.",
-    savings: "You're one unexpected expense away from real financial stress. Building your emergency fund should be priority number one.",
-    budget: "Without consistent budget tracking, money leaks every month without you noticing. A simple system would change your numbers fast.",
-    income: "Your income situation creates some instability. Protecting your cash flow is the first step toward everything else.",
-    retirement: "Long-term wealth building hasn't started yet. Even small consistent contributions now make a massive difference later.",
-    behavior: "Your relationship with money is holding back your progress. Clarity and a real plan would change how you feel about your finances."
-  };
-
-  const strengthMap = {
-    debt: "You're managing your debt well. That's one of the hardest things to get right.",
-    savings: "Your emergency fund is solid. That cushion protects everything else you're building.",
-    budget: "You track your money consistently. That discipline separates you from most people.",
-    income: "Your income is stable and strong. That's the foundation everything else builds on.",
-    retirement: "You're already building long-term wealth. Most people your age haven't started.",
-    behavior: "You have a clear financial mindset and real goals. That clarity is rare."
-  };
-
-  const diagnosis = diagnosisMap[lowestCategory] || "Focus on your weakest area first for the fastest improvement.";
-  const strength = strengthMap[highestCategory] || "Keep building on what's already working.";
-
   const color = getColor(score);
+  const label = getLabel(score);
+  const sub = getSub(score);
+  const personality = getPersonality(score);
 
-  // Financial Personality Types
-  const getPersonality = (score, cats) => {
-    const debtPct = Math.round((cats.debt.earned / cats.debt.max) * 100);
-    const savingsPct = Math.round((cats.savings.earned / cats.savings.max) * 100);
-    const budgetPct = Math.round((cats.budget.earned / cats.budget.max) * 100);
-    const incomePct = Math.round((cats.income.earned / cats.income.max) * 100);
-    const retirePct = Math.round((cats.retirement.earned / cats.retirement.max) * 100);
-
-    if (score >= 85) return {
-      type: "Financial Architect",
-      emoji: "🏆",
-      desc: "You have strong habits across the board. You're building something real and the numbers show it.",
-      risk: "Complacency — even strong foundations need regular attention.",
-      opportunity: "Small optimizations now could push your score into the 90s and accelerate wealth building significantly."
-    };
-    if (score >= 70 && debtPct < 60) return {
-      type: "Debt Pressured Builder",
-      emoji: "💳",
-      desc: "You're doing a lot right — but debt is quietly dragging your progress down every month.",
-      risk: "High interest debt is costing you more than you realize each month.",
-      opportunity: "Eliminating debt could free up hundreds monthly and push your score up 15+ points fast."
-    };
-    if (score >= 70 && savingsPct < 60) return {
-      type: "Income Strong, Safety Thin",
-      emoji: "⚡",
-      desc: "Your income game is solid but your safety net has gaps. One bad month could set you back.",
-      risk: "You're one unexpected expense away from going into debt.",
-      opportunity: "Building a real emergency fund would transform your financial stability immediately."
-    };
-    if (score >= 55 && budgetPct < 60) return {
-      type: "Cash Flow Drifter",
-      emoji: "💸",
-      desc: "You make enough to improve your situation but inconsistent planning is quietly holding you back.",
-      risk: "Money is slipping through the cracks every month without a real system.",
-      opportunity: "A simple consistent budget could raise your score 12-18 points within 90 days."
-    };
-    if (score >= 55 && retirePct < 50) return {
-      type: "Present Focused, Future Gaps",
-      emoji: "📅",
-      desc: "You're managing today well but the long game needs attention before it becomes urgent.",
-      risk: "Every year you delay retirement contributions costs more than just that year.",
-      opportunity: "Starting small now creates compounding growth that changes your entire financial future."
-    };
-    if (score >= 40) return {
-      type: "Financial Reset Needed",
-      emoji: "🔄",
-      desc: "There are real gaps across multiple areas — but you now know exactly what they are.",
-      risk: "Multiple pressure points are working against you at the same time.",
-      opportunity: "A clear priority list and 90-day plan could start turning this around immediately."
-    };
-    return {
-      type: "Starting Line",
-      emoji: "🚀",
-      desc: "You're at the beginning of your financial journey. The good news — you started.",
-      risk: "Without a clear plan, old patterns will keep repeating.",
-      opportunity: "Getting clarity on your situation is the single most important first step. You just took it."
-    };
-  };
-
-  const personality = getPersonality(score, cats);
   const circumference = 440;
   const offset = circumference - (score / 100) * circumference;
 
-  const resultsEl = document.getElementById('results-screen');
-  resultsEl.style.display = 'block';
-  resultsEl.classList.add('slide-in');
+  const results = document.getElementById('results-screen');
 
-  resultsEl.innerHTML = `
-    <div class="personality-card">
-      <div class="personality-emoji">${personality.emoji}</div>
-      <div class="personality-type">${personality.type}</div>
-      <div class="personality-desc">${personality.desc}</div>
-    </div>
+  results.style.display = 'block';
+
+  results.innerHTML = `
     <div class="results-top">
+
       <div class="score-ring-wrap">
-        <svg viewBox="0 0 150 150">
-          <circle class="ring-track" cx="75" cy="75" r="70"/>
-          <circle class="ring-score" cx="75" cy="75" r="70"
+        <svg viewBox="0 0 160 160">
+          <circle class="ring-track" cx="80" cy="80" r="70"></circle>
+
+          <circle
+            class="ring-score"
+            cx="80"
+            cy="80"
+            r="70"
             stroke="${color}"
-            style="stroke-dashoffset:${circumference};filter:drop-shadow(0 0 8px ${color}60)"
-            id="ring-anim"/>
+            style="stroke-dashoffset:${offset}"
+          ></circle>
         </svg>
+
         <div class="ring-center">
-          <div class="ring-num" style="color:${color}" id="ring-num">0</div>
+          <div class="ring-num">${score}</div>
           <div class="ring-denom">/ 100</div>
         </div>
       </div>
-      <div class="results-label">${getLabel(score)}</div>
-      <div class="results-sub">${getSub(score)}</div>
+
+      <div class="results-label">${label}</div>
+      <div class="results-sub">${sub}</div>
+
     </div>
 
-    <div class="cat-breakdown">
-      ${Object.values(cats).map((c, idx) => {
-        const pct = Math.round((c.earned / c.max) * 100);
-        const col = getColor(pct);
-        return `
-          <div class="cat-row">
-            <div class="cat-left">
-              <div class="cat-name">${c.label}</div>
-              <div class="cat-bar-track">
-                <div class="cat-bar-fill" style="width:0%;background:${col};--delay:${idx * 0.1}s" id="cat-bar-${idx}"></div>
-              </div>
-            </div>
-            <div class="cat-score-num" style="color:${col}">${pct}</div>
-          </div>
-        `;
-      }).join('')}
+    <div class="personality-card">
+      <div class="personality-emoji">${personality.emoji}</div>
+      <div class="personality-type">${personality.title}</div>
+      <div class="personality-desc">${personality.desc}</div>
     </div>
 
     <div class="diagnosis-block">
+
       <div class="diagnosis-item strength">
-        <div class="diag-label">⚠️ Biggest Risk</div>
-        <div class="diag-text">${personality.risk}</div>
+        <div class="diag-label">Biggest Strength</div>
+        <div class="diag-text">
+          You already have financial awareness and are taking action by measuring where you stand.
+        </div>
       </div>
+
       <div class="diagnosis-item warning">
-        <div class="diag-label">🚀 Biggest Opportunity</div>
-        <div class="diag-text">${personality.opportunity}</div>
+        <div class="diag-label">Main Opportunity</div>
+        <div class="diag-text">
+          Small improvements in budgeting, savings, and debt management could dramatically improve your long-term financial position.
+        </div>
       </div>
+
     </div>
 
     <div class="tease-block">
-      <h3>Your score is just the beginning.</h3>
-      <p>The full audit goes deeper — personalized to your exact numbers with a real action plan.</p>
+
+      <h3>Unlock Your Full Financial Breakdown</h3>
+
+      <p>
+        Get a deeper personalized analysis showing exactly what’s helping or hurting your financial future.
+      </p>
+
       <div class="tease-items">
-        <div class="tease-item">Your overall Financial Health Score out of 100</div>
-        <div class="tease-item">What you're doing right and what needs attention</div>
-        <div class="tease-item locked">Personalized debt payoff strategy</div>
-        <div class="tease-item locked">Exact savings targets for your situation</div>
-        <div class="tease-item locked">Custom 90-day action plan</div>
-        <div class="tease-item locked">Full beautifully designed PDF report</div>
+        <div class="tease-item">Personalized financial analysis</div>
+        <div class="tease-item">Savings & debt optimization tips</div>
+        <div class="tease-item">Custom next-step recommendations</div>
+        <div class="tease-item locked">Advanced wealth-building strategy</div>
       </div>
+
+      <a href="#" class="btn-cta">
+        Unlock Full Report →
+      </a>
+
+      <div class="cta-note">
+        Instant access • Personalized insights
+      </div>
+
     </div>
 
     <div class="email-capture">
-      <h3>Want your full breakdown emailed to you?</h3>
-      <p>Enter your email and We'll send you the complete PDF report with your personalized action plan.</p>
+
+      <h3>Want Your Results Sent To You?</h3>
+
+      <p>
+        Enter your email to save your score and receive future financial tools and insights.
+      </p>
+
       <div class="email-row">
-        <input type="email" id="capture-email" placeholder="Enter your email" />
-        <button onclick="submitCapture()">Send My Report $47 →</button>
+        <input type="email" placeholder="Enter your email" />
+        <button>Email My Results</button>
       </div>
-      <div id="capture-success" style="display:none;color:var(--green);font-size:13px;margin-top:10px;text-align:center">✅ Got it! Redirecting you now...</div>
-      <div class="cta-note">Personally reviewed. Delivered within 24 hours. 100% Satisfaction Guarantee.</div>
+
     </div>
   `;
-
-  // Animate score counter
-  let current = 0;
-  const interval = setInterval(() => {
-    current = Math.min(current + 2, score);
-    document.getElementById('ring-num').textContent = current;
-    if (current >= score) clearInterval(interval);
-  }, 20);
-
-  // Animate ring
-  setTimeout(() => {
-    document.getElementById('ring-anim').style.transition = 'stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1)';
-    document.getElementById('ring-anim').style.strokeDashoffset = offset;
-  }, 100);
-
-  // Animate category bars
-  setTimeout(() => {
-    Object.values(cats).forEach((c, idx) => {
-      const pct = Math.round((c.earned / c.max) * 100);
-      const bar = document.getElementById(`cat-bar-${idx}`);
-      if (bar) bar.style.width = pct + '%';
-    });
-  }, 300);
 }
-
-function submitCapture() {
-  const email = document.getElementById('capture-email').value;
-  if (!email || !email.includes('@')) {
-    alert('Please enter a valid email address.');
-    return;
-  }
-  document.getElementById('capture-success').style.display = 'block';
-  setTimeout(() => {
-    window.location.href = 'https://scorehavenfinancial.com/intake';
-  }, 1500);
-}
+  
 </script>
 </body>
 </html>
