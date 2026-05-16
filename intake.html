@@ -1,0 +1,930 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ScoreHaven Financial — Get Your Audit</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #00D68F;
+    --green-dark: #00A86B;
+    --ink: #080D18;
+    --ink2: #0F1825;
+    --card: #131E2E;
+    --border: rgba(255,255,255,0.08);
+    --muted: #6B8099;
+    --white: #F0F6FF;
+    --yellow: #FFD166;
+    --red: #FF6B6B;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(0,214,143,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,214,143,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+  .bg-glow {
+    position: fixed; top: -300px; left: 50%;
+    transform: translateX(-50%);
+    width: 900px; height: 700px;
+    background: radial-gradient(ellipse, rgba(0,214,143,0.06) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .wrapper {
+    position: relative; z-index: 1;
+    max-width: 640px; margin: 0 auto;
+    padding: 48px 20px 80px;
+  }
+
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 40px; animation: fadeDown 0.6s ease both; }
+  .brand-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800; font-size: 20px; color: var(--white);
+  }
+  .brand-name span { color: var(--green); }
+  .header-tag {
+    display: inline-block; margin-top: 8px;
+    background: rgba(0,214,143,0.1); color: var(--green);
+    font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 5px 14px;
+    border-radius: 100px; border: 1px solid rgba(0,214,143,0.2);
+  }
+  .header h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800; font-size: clamp(26px,5vw,36px);
+    line-height: 1.1; margin: 16px 0 10px; color: var(--white);
+  }
+  .header h1 span { color: var(--green); }
+  .header p { font-size: 15px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 32px; animation: fadeUp 0.5s ease 0.1s both; }
+  .progress-steps {
+    display: flex; gap: 6px; margin-bottom: 10px;
+  }
+  .progress-step {
+    flex: 1; height: 3px; border-radius: 100px;
+    background: rgba(255,255,255,0.08);
+    transition: background 0.4s;
+  }
+  .progress-step.done { background: var(--green); box-shadow: 0 0 8px rgba(0,214,143,0.4); }
+  .progress-step.active { background: rgba(0,214,143,0.4); }
+  .progress-label {
+    font-size: 12px; color: var(--muted);
+    display: flex; justify-content: space-between;
+  }
+  .progress-label span { color: var(--green); font-weight: 600; }
+
+  /* FORM CARD */
+  .form-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px; overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.4);
+    animation: fadeUp 0.5s ease 0.2s both;
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    padding: 28px 32px 0;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .section-icon {
+    width: 44px; height: 44px; border-radius: 14px;
+    background: rgba(0,214,143,0.1); border: 1px solid rgba(0,214,143,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .section-title-wrap h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700; font-size: 18px; color: var(--white);
+    margin-bottom: 2px;
+  }
+  .section-title-wrap p { font-size: 13px; color: var(--muted); }
+
+  /* FIELDS */
+  .fields { padding: 24px 32px; display: flex; flex-direction: column; gap: 16px; }
+
+  .field { display: flex; flex-direction: column; gap: 7px; }
+  .field label {
+    font-size: 12px; font-weight: 500; color: var(--muted);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .field label .req { color: var(--green); margin-left: 2px; }
+
+  .field input, .field select, .field textarea {
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 13px 16px;
+    font-size: 14px; color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    outline: none; transition: border 0.2s, box-shadow 0.2s;
+    width: 100%;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--green);
+    box-shadow: 0 0 0 3px rgba(0,214,143,0.1);
+  }
+  .field input::placeholder, .field textarea::placeholder { color: rgba(255,255,255,0.2); }
+  .field select option { background: #131E2E; color: var(--white); }
+  .field textarea { resize: vertical; min-height: 80px; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* RADIO OPTIONS */
+  .radio-group { display: flex; flex-direction: column; gap: 8px; }
+  .radio-opt {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1.5px solid rgba(255,255,255,0.07);
+    border-radius: 12px; padding: 12px 16px;
+    cursor: pointer; transition: all 0.2s; font-size: 14px; color: #A8B8CC;
+  }
+  .radio-opt:hover { border-color: rgba(0,214,143,0.3); background: rgba(0,214,143,0.04); color: var(--white); }
+  .radio-opt.selected { border-color: var(--green); background: rgba(0,214,143,0.07); color: var(--white); }
+  .radio-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.15); flex-shrink: 0;
+    transition: all 0.2s; background: transparent;
+  }
+  .radio-opt.selected .radio-dot { border-color: var(--green); background: var(--green); box-shadow: 0 0 6px rgba(0,214,143,0.5); }
+  .radio-opt input { display: none; }
+
+  /* STRESS SLIDER */
+  .stress-slider-wrap { margin-top: 4px; }
+  .stress-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  input[type="range"] {
+    width: 100%; height: 6px; border-radius: 100px;
+    outline: none; cursor: pointer; appearance: none;
+    background: rgba(255,255,255,0.08);
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    appearance: none; width: 20px; height: 20px;
+    border-radius: 50%; background: var(--green);
+    border: 3px solid var(--ink); box-shadow: 0 0 8px rgba(0,214,143,0.4);
+    cursor: pointer;
+  }
+  .stress-value {
+    text-align: center; margin-top: 8px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 700; font-size: 24px; color: var(--green);
+  }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: rgba(255,255,255,0.05); margin: 0 32px; }
+
+  /* NAV */
+  .form-nav {
+    padding: 20px 32px 28px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .btn-back {
+    background: transparent; color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px; padding: 12px 20px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-back:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+  .btn-next {
+    background: var(--green); color: var(--ink);
+    border: none; border-radius: 12px; padding: 13px 28px;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 0 20px rgba(0,214,143,0.25);
+  }
+  .btn-next:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(0,214,143,0.4); }
+  .btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  /* PAYMENT SCREEN */
+  .payment-screen { padding: 32px; display: none; }
+  .payment-summary {
+    background: rgba(0,214,143,0.06);
+    border: 1px solid rgba(0,214,143,0.15);
+    border-radius: 18px; padding: 24px;
+    margin-bottom: 24px; text-align: center;
+  }
+  .payment-summary h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800; font-size: 18px; margin-bottom: 8px;
+  }
+  .payment-summary p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+  .payment-price { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 52px; color: var(--green); line-height: 1; }
+  .payment-note { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .payment-includes { text-align: left; margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .payment-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #A8B8CC; }
+  .payment-item::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+  .btn-pay {
+    display: block; width: 100%;
+    background: var(--green); color: var(--ink);
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800; font-size: 16px;
+    padding: 18px; border-radius: 14px;
+    border: none; cursor: pointer; text-align: center;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 0 28px rgba(0,214,143,0.3);
+    margin-bottom: 12px;
+  }
+  .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(0,214,143,0.45); }
+  .pay-guarantee {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    font-size: 13px; color: var(--muted); padding: 12px;
+    background: rgba(255,255,255,0.03); border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* SUCCESS SCREEN */
+  .success-screen { padding: 48px 32px; text-align: center; display: none; }
+  .success-icon { font-size: 56px; margin-bottom: 20px; animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+  @keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .success-screen h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800; font-size: 28px; margin-bottom: 12px;
+  }
+  .success-screen p { font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 360px; margin: 0 auto; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 480px) {
+    .section-header, .fields, .form-nav { padding-left: 20px; padding-right: 20px; }
+    .divider { margin: 0 20px; }
+    .field-row { grid-template-columns: 1fr; }
+    .payment-screen, .success-screen { padding: 24px 20px; }
+  }
+
+  /* MOBILE SAFARI FIXES */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  button, a, label, .radio-opt, .btn-next, .btn-back, .btn-pay {
+    cursor: pointer;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-appearance: none;
+    touch-action: manipulation;
+  }
+  input, select, textarea {
+    -webkit-appearance: none;
+    border-radius: 12px;
+    font-size: 16px !important;
+  }
+  /* Prevent zoom on input focus iOS */
+  @media screen and (max-width: 768px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+    .radio-opt {
+      padding: 16px;
+      margin-bottom: 2px;
+    }
+    .btn-next, .btn-back, .btn-pay {
+      padding: 16px 24px;
+      font-size: 15px;
+    }
+    .fields {
+      padding: 20px 16px;
+    }
+    .section-header {
+      padding: 24px 16px 0;
+    }
+    .form-nav {
+      padding: 16px;
+    }
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<div class="wrapper">
+
+  <div class="header">
+    <div class="brand-name">Score<span>Haven</span> Financial</div>
+    <div class="header-tag">Financial Health Audit — $47</div>
+    <h1>Let's build your<br><span>personalized report.</span></h1>
+    <p>This isn't just a form. This is the first step toward real financial clarity. Fill it out honestly and We'll build something personally for you.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap">
+    <div class="progress-steps" id="progress-steps">
+      <div class="progress-step active"></div>
+      <div class="progress-step"></div>
+      <div class="progress-step"></div>
+      <div class="progress-step"></div>
+      <div class="progress-step"></div>
+    </div>
+    <div class="progress-label">
+      <span id="section-label">Section 1 of 4</span>
+      <span id="section-name">Your Info</span>
+    </div>
+  </div>
+
+  <div class="form-card">
+
+    <!-- SECTION 1: PERSONAL INFO -->
+    <div id="section-1">
+      <div class="section-header">
+        <div class="section-icon">👤</div>
+        <div class="section-title-wrap">
+          <h2>About You</h2>
+          <p>Basic info so I can personalize your report</p>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" id="firstName" name="first_name" placeholder="Your first name"/>
+          </div>
+          <div class="field">
+            <label>Age Range <span class="req">*</span></label>
+            <select id="ageRange" name="age_range">
+              <option value="">Select age range</option>
+              <option>18–25</option>
+              <option>26–35</option>
+              <option>36–45</option>
+              <option>46–55</option>
+              <option>55+</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="Where We'll send your report"/>
+        </div>
+        <div class="field">
+          <label>Primary Financial Goal <span class="req">*</span></label>
+          <div class="radio-group" id="goalGroup">
+            <label class="radio-opt" onclick="selectRadio('goalGroup', this, 'goal')"><span class="radio-dot"></span>Pay off debt</label>
+            <label class="radio-opt" onclick="selectRadio('goalGroup', this, 'goal')"><span class="radio-dot"></span>Build emergency savings</label>
+            <label class="radio-opt" onclick="selectRadio('goalGroup', this, 'goal')"><span class="radio-dot"></span>Start investing or retirement</label>
+            <label class="radio-opt" onclick="selectRadio('goalGroup', this, 'goal')"><span class="radio-dot"></span>Buy a home</label>
+            <label class="radio-opt" onclick="selectRadio('goalGroup', this, 'goal')"><span class="radio-dot"></span>General financial clarity</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Biggest Financial Concern Right Now</label>
+          <textarea id="concern" name="biggest_concern" placeholder="Tell me what's stressing you most financially..."></textarea>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="form-nav">
+        <div></div>
+        <button class="btn-next" onclick="nextSection(1)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 2: INCOME & EXPENSES -->
+    <div id="section-2" style="display:none">
+      <div class="section-header">
+        <div class="section-icon">💰</div>
+        <div class="section-title-wrap">
+          <h2>Income & Expenses</h2>
+          <p>Your monthly cash flow picture</p>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label>How stable is your income? <span class="req">*</span></label>
+          <div class="radio-group" id="stabilityGroup">
+            <label class="radio-opt" onclick="selectRadio('stabilityGroup', this, 'stability')"><span class="radio-dot"></span>Very stable — same every month</label>
+            <label class="radio-opt" onclick="selectRadio('stabilityGroup', this, 'stability')"><span class="radio-dot"></span>Mostly stable — small changes sometimes</label>
+            <label class="radio-opt" onclick="selectRadio('stabilityGroup', this, 'stability')"><span class="radio-dot"></span>It varies — some months better than others</label>
+            <label class="radio-opt" onclick="selectRadio('stabilityGroup', this, 'stability')"><span class="radio-dot"></span>Pretty unstable — hard to predict</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Monthly Take-Home Income (after taxes) <span class="req">*</span></label>
+          <input type="text" id="income" name="monthly_income" placeholder="e.g. $4,500"/>
+        </div>
+        <div class="field">
+          <label>Does anyone else contribute income to your household?</label>
+          <div class="radio-group" id="partnerGroup">
+            <label class="radio-opt" onclick="selectRadio('partnerGroup', this, 'partner'); togglePartner(this)"><span class="radio-dot"></span>Yes</label>
+            <label class="radio-opt" onclick="selectRadio('partnerGroup', this, 'partner'); togglePartner(this)"><span class="radio-dot"></span>No</label>
+          </div>
+        </div>
+        <div class="field" id="partnerIncomeField" style="display:none">
+          <label>Their Monthly Take-Home Income</label>
+          <input type="text" id="partnerIncome" name="partner_income" placeholder="e.g. $2,000"/>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Monthly Fixed Expenses <span class="req">*</span></label>
+            <input type="text" id="fixedExp" name="fixed_expenses" placeholder="Rent, car, insurance..."/>
+          </div>
+          <div class="field">
+            <label>Monthly Variable Expenses <span class="req">*</span></label>
+            <input type="text" id="varExp" name="variable_expenses" placeholder="Food, gas, shopping..."/>
+          </div>
+        </div>
+        <div class="field">
+          <label>Monthly Subscriptions</label>
+          <input type="text" id="subscriptions" name="subscriptions" placeholder="Netflix, gym, apps... e.g. $75"/>
+        </div>
+        <div class="field">
+          <label>Do you expect large expenses in the next 12 months?</label>
+          <div class="radio-group" id="largeExpGroup">
+            <label class="radio-opt" onclick="selectRadio('largeExpGroup', this, 'largeExp')"><span class="radio-dot"></span>No</label>
+            <label class="radio-opt" onclick="selectRadio('largeExpGroup', this, 'largeExp')"><span class="radio-dot"></span>Yes — under $1,000</label>
+            <label class="radio-opt" onclick="selectRadio('largeExpGroup', this, 'largeExp')"><span class="radio-dot"></span>Yes — $1,000 to $5,000</label>
+            <label class="radio-opt" onclick="selectRadio('largeExpGroup', this, 'largeExp')"><span class="radio-dot"></span>Yes — over $5,000</label>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="prevSection(2)">← Back</button>
+        <button class="btn-next" onclick="nextSection(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 3: DEBT & SAVINGS -->
+    <div id="section-3" style="display:none">
+      <div class="section-header">
+        <div class="section-icon">🏦</div>
+        <div class="section-title-wrap">
+          <h2>Debt & Savings</h2>
+          <p>Where you stand with money in and money owed</p>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label>Total Debt Balance <span class="req">*</span></label>
+          <div class="radio-group" id="debtGroup">
+            <label class="radio-opt" onclick="selectRadio('debtGroup', this, 'debt')"><span class="radio-dot"></span>No debt</label>
+            <label class="radio-opt" onclick="selectRadio('debtGroup', this, 'debt')"><span class="radio-dot"></span>Under $5,000</label>
+            <label class="radio-opt" onclick="selectRadio('debtGroup', this, 'debt')"><span class="radio-dot"></span>$5,000 to $15,000</label>
+            <label class="radio-opt" onclick="selectRadio('debtGroup', this, 'debt')"><span class="radio-dot"></span>$15,000 to $30,000</label>
+            <label class="radio-opt" onclick="selectRadio('debtGroup', this, 'debt')"><span class="radio-dot"></span>Over $30,000</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Minimum Monthly Debt Payment <span class="req">*</span></label>
+          <input type="text" id="debtPayment" name="monthly_debt_payment" placeholder="e.g. $450"/>
+        </div>
+        <div class="field">
+          <label>Emergency Savings <span class="req">*</span></label>
+          <div class="radio-group" id="emergencyGroup">
+            <label class="radio-opt" onclick="selectRadio('emergencyGroup', this, 'emergency')"><span class="radio-dot"></span>Nothing saved</label>
+            <label class="radio-opt" onclick="selectRadio('emergencyGroup', this, 'emergency')"><span class="radio-dot"></span>Under $1,000</label>
+            <label class="radio-opt" onclick="selectRadio('emergencyGroup', this, 'emergency')"><span class="radio-dot"></span>$1,000 to $5,000</label>
+            <label class="radio-opt" onclick="selectRadio('emergencyGroup', this, 'emergency')"><span class="radio-dot"></span>$5,000 to $15,000</label>
+            <label class="radio-opt" onclick="selectRadio('emergencyGroup', this, 'emergency')"><span class="radio-dot"></span>Over $15,000</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Total Savings Across All Accounts <span class="req">*</span></label>
+          <div class="radio-group" id="savingsGroup">
+            <label class="radio-opt" onclick="selectRadio('savingsGroup', this, 'savings')"><span class="radio-dot"></span>Under $1,000</label>
+            <label class="radio-opt" onclick="selectRadio('savingsGroup', this, 'savings')"><span class="radio-dot"></span>$1,000 to $5,000</label>
+            <label class="radio-opt" onclick="selectRadio('savingsGroup', this, 'savings')"><span class="radio-dot"></span>$5,000 to $15,000</label>
+            <label class="radio-opt" onclick="selectRadio('savingsGroup', this, 'savings')"><span class="radio-dot"></span>$15,000 to $30,000</label>
+            <label class="radio-opt" onclick="selectRadio('savingsGroup', this, 'savings')"><span class="radio-dot"></span>Over $30,000</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Are you contributing to retirement? <span class="req">*</span></label>
+          <div class="radio-group" id="retirementGroup">
+            <label class="radio-opt" onclick="selectRadio('retirementGroup', this, 'retirement')"><span class="radio-dot"></span>Yes — regularly</label>
+            <label class="radio-opt" onclick="selectRadio('retirementGroup', this, 'retirement')"><span class="radio-dot"></span>Yes — occasionally</label>
+            <label class="radio-opt" onclick="selectRadio('retirementGroup', this, 'retirement')"><span class="radio-dot"></span>Not yet but I plan to</label>
+            <label class="radio-opt" onclick="selectRadio('retirementGroup', this, 'retirement')"><span class="radio-dot"></span>No</label>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="prevSection(3)">← Back</button>
+        <button class="btn-next" onclick="nextSection(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 4: BEHAVIOR -->
+    <div id="section-4" style="display:none">
+      <div class="section-header">
+        <div class="section-icon">🧠</div>
+        <div class="section-title-wrap">
+          <h2>Habits & Mindset</h2>
+          <p>How you actually manage your money day to day</p>
+        </div>
+      </div>
+      <div class="fields">
+        <div class="field">
+          <label>How closely do you follow a budget? <span class="req">*</span></label>
+          <div class="radio-group" id="budgetGroup">
+            <label class="radio-opt" onclick="selectRadio('budgetGroup', this, 'budget')"><span class="radio-dot"></span>Very closely — I track everything</label>
+            <label class="radio-opt" onclick="selectRadio('budgetGroup', this, 'budget')"><span class="radio-dot"></span>Sometimes — I follow it loosely</label>
+            <label class="radio-opt" onclick="selectRadio('budgetGroup', this, 'budget')"><span class="radio-dot"></span>Rarely — I have one but don't really follow it</label>
+            <label class="radio-opt" onclick="selectRadio('budgetGroup', this, 'budget')"><span class="radio-dot"></span>I don't have a budget</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>What percentage of your income goes to debt payments? <span class="req">*</span></label>
+          <div class="radio-group" id="debtPctGroup">
+            <label class="radio-opt" onclick="selectRadio('debtPctGroup', this, 'debtPct')"><span class="radio-dot"></span>I have no debt payments</label>
+            <label class="radio-opt" onclick="selectRadio('debtPctGroup', this, 'debtPct')"><span class="radio-dot"></span>Under 20% of my income</label>
+            <label class="radio-opt" onclick="selectRadio('debtPctGroup', this, 'debtPct')"><span class="radio-dot"></span>20 to 35% of my income</label>
+            <label class="radio-opt" onclick="selectRadio('debtPctGroup', this, 'debtPct')"><span class="radio-dot"></span>Over 35% of my income</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Financial stress level right now <span class="req">*</span></label>
+          <div class="stress-slider-wrap">
+            <div class="stress-labels"><span>Not stressed</span><span>Very stressed</span></div>
+            <input type="range" id="stressSlider" name="stress_level" min="1" max="10" value="5" oninput="updateStress()"/>
+            <div class="stress-value" id="stressVal">5 / 10</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Anything else I should know about your situation?</label>
+          <textarea id="extraInfo" name="extra_info" placeholder="Any context that would help me give you a better report..."></textarea>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="prevSection(4)">← Back</button>
+        <button class="btn-next" onclick="nextSection(4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- SECTION 5: FINANCIAL OUTLOOK -->
+    <div id="section-5" style="display:none">
+      <div class="section-header">
+        <div class="section-icon">🔭</div>
+        <div class="section-title-wrap">
+          <h2>Financial Outlook</h2>
+          <p>The deeper picture — this is what separates a good report from a great one</p>
+        </div>
+      </div>
+      <div class="fields">
+
+        <div class="field">
+          <label>Do you know your approximate net worth? <span class="req">*</span></label>
+          <div class="radio-group" id="networthGroup">
+            <label class="radio-opt" onclick="selectRadio('networthGroup', this, 'networth')"><span class="radio-dot"></span>Yes — I track it regularly</label>
+            <label class="radio-opt" onclick="selectRadio('networthGroup', this, 'networth')"><span class="radio-dot"></span>I have a rough idea</label>
+            <label class="radio-opt" onclick="selectRadio('networthGroup', this, 'networth')"><span class="radio-dot"></span>Not really sure</label>
+            <label class="radio-opt" onclick="selectRadio('networthGroup', this, 'networth')"><span class="radio-dot"></span>No idea at all</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>What is your approximate credit score range?</label>
+          <div class="radio-group" id="creditGroup">
+            <label class="radio-opt" onclick="selectRadio('creditGroup', this, 'credit')"><span class="radio-dot"></span>750+ (Excellent)</label>
+            <label class="radio-opt" onclick="selectRadio('creditGroup', this, 'credit')"><span class="radio-dot"></span>700–749 (Good)</label>
+            <label class="radio-opt" onclick="selectRadio('creditGroup', this, 'credit')"><span class="radio-dot"></span>650–699 (Fair)</label>
+            <label class="radio-opt" onclick="selectRadio('creditGroup', this, 'credit')"><span class="radio-dot"></span>600–649 (Poor)</label>
+            <label class="radio-opt" onclick="selectRadio('creditGroup', this, 'credit')"><span class="radio-dot"></span>Below 600 or I don't know</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Do you have adequate insurance coverage? <span class="req">*</span></label>
+          <div class="radio-group" id="insuranceGroup">
+            <label class="radio-opt" onclick="selectRadio('insuranceGroup', this, 'insurance')"><span class="radio-dot"></span>Yes — health, auto, life, and renters/home</label>
+            <label class="radio-opt" onclick="selectRadio('insuranceGroup', this, 'insurance')"><span class="radio-dot"></span>Some coverage but not everything</label>
+            <label class="radio-opt" onclick="selectRadio('insuranceGroup', this, 'insurance')"><span class="radio-dot"></span>Just the basics — health and auto</label>
+            <label class="radio-opt" onclick="selectRadio('insuranceGroup', this, 'insurance')"><span class="radio-dot"></span>Minimal or no insurance coverage</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>What triggers your biggest spending? <span class="req">*</span></label>
+          <div class="radio-group" id="triggerGroup">
+            <label class="radio-opt" onclick="selectRadio('triggerGroup', this, 'trigger')"><span class="radio-dot"></span>Emotions — stress, boredom, or celebration</label>
+            <label class="radio-opt" onclick="selectRadio('triggerGroup', this, 'trigger')"><span class="radio-dot"></span>Social situations — eating out, events, keeping up</label>
+            <label class="radio-opt" onclick="selectRadio('triggerGroup', this, 'trigger')"><span class="radio-dot"></span>Convenience — quick purchases without thinking</label>
+            <label class="radio-opt" onclick="selectRadio('triggerGroup', this, 'trigger')"><span class="radio-dot"></span>I don't have a spending trigger problem</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>How are you trying to improve your financial situation? <span class="req">*</span></label>
+          <div class="radio-group" id="improvGroup">
+            <label class="radio-opt" onclick="selectRadio('improvGroup', this, 'improv')"><span class="radio-dot"></span>Cutting expenses and spending less</label>
+            <label class="radio-opt" onclick="selectRadio('improvGroup', this, 'improv')"><span class="radio-dot"></span>Trying to increase my income</label>
+            <label class="radio-opt" onclick="selectRadio('improvGroup', this, 'improv')"><span class="radio-dot"></span>Both — cutting costs and growing income</label>
+            <label class="radio-opt" onclick="selectRadio('improvGroup', this, 'improv')"><span class="radio-dot"></span>I haven't started yet</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Where did you learn about money growing up?</label>
+          <div class="radio-group" id="upbringingGroup">
+            <label class="radio-opt" onclick="selectRadio('upbringingGroup', this, 'upbringing')"><span class="radio-dot"></span>My family talked about money openly and positively</label>
+            <label class="radio-opt" onclick="selectRadio('upbringingGroup', this, 'upbringing')"><span class="radio-dot"></span>Money was rarely discussed at home</label>
+            <label class="radio-opt" onclick="selectRadio('upbringingGroup', this, 'upbringing')"><span class="radio-dot"></span>Money was stressful and a source of conflict</label>
+            <label class="radio-opt" onclick="selectRadio('upbringingGroup', this, 'upbringing')"><span class="radio-dot"></span>I figured it out mostly on my own</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Where do you want to be financially in 5 years?</label>
+          <textarea id="fiveYear" name="five_year_goal" placeholder="Be specific — house, debt free, invested, business, travel... what does financial freedom look like for you?"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Is there anything holding you back from improving your finances?</label>
+          <textarea id="holdingBack" name="holding_back" placeholder="Be honest — income, knowledge, discipline, life circumstances... no judgment here."></textarea>
+        </div>
+
+      </div>
+      <div class="divider"></div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="prevSection(5)">← Back</button>
+        <button class="btn-next" onclick="showPayment()">Review & Pay →</button>
+      </div>
+    </div>
+
+    <!-- PAYMENT SCREEN -->
+    <div class="payment-screen" id="payment-screen">
+      <div class="payment-summary">
+        <h3>You're almost there, <span id="summaryName">friend</span>. 🎯</h3>
+        <p>Your intake is complete. Complete payment and We'll have your personalized Financial Health Score report in your inbox within 24 hours.</p>
+        <div class="payment-price">$47</div>
+        <div class="payment-note">One time · 24 hour delivery · 100% Satisfaction Guarantee</div>
+        <div class="payment-includes">
+          <div class="payment-item">Full personalized Financial Health Score</div>
+          <div class="payment-item">Score across 5 categories</div>
+          <div class="payment-item">Your strengths and risk areas</div>
+          <div class="payment-item">Debt payoff guidance</div>
+          <div class="payment-item">Custom 90-day action plan</div>
+          <div class="payment-item">Beautifully designed PDF report</div>
+          <div class="payment-item">Personally reviewed — not auto-generated</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:4px">👤</div>
+          <div style="font-size:12px;color:#A8B8CC;font-weight:500">Personally Reviewed</div>
+          <div style="font-size:11px;color:#6B8099;margin-top:2px">Not auto-generated</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:4px">⚡</div>
+          <div style="font-size:12px;color:#A8B8CC;font-weight:500">24 Hour Delivery</div>
+          <div style="font-size:11px;color:#6B8099;margin-top:2px">Straight to your inbox</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:4px">🛡️</div>
+          <div style="font-size:12px;color:#A8B8CC;font-weight:500">7+ Years Experience</div>
+          <div style="font-size:11px;color:#6B8099;margin-top:2px">Insurance & Risk background</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:20px;margin-bottom:4px">🔒</div>
+          <div style="font-size:12px;color:#A8B8CC;font-weight:500">100% Guarantee</div>
+          <div style="font-size:11px;color:#6B8099;margin-top:2px">Not happy? We'll fix it</div>
+        </div>
+      </div>
+      <button class="btn-pay" onclick="submitAndPay()">Complete Payment — $47 →</button>
+      <div class="pay-guarantee">🔒 <strong>100% Satisfaction Guarantee</strong> — not happy? We'll make it right.</div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="success-screen" id="success-screen">
+      <div class="success-icon">🎉</div>
+      <h2>You just invested in yourself.</h2>
+      <p style="margin-bottom:16px">That's the hardest part — and you did it. Your personalized Financial Health Report is being built right now. Check your inbox within 24 hours.</p>
+      <div style="background:rgba(0,214,143,0.08);border:1px solid rgba(0,214,143,0.2);border-radius:14px;padding:16px;text-align:left;margin-top:16px">
+        <div style="font-size:12px;color:#00D68F;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px">What happens next</div>
+        <div style="font-size:13px;color:#A8B8CC;line-height:1.8">
+          ✓ We personally review your answers<br>
+          ✓ I build your custom Financial Health Score<br>
+          ✓ Your full PDF report lands in your inbox within 24 hours<br>
+          ✓ Questions? Just reach us at hello@scorehavenfinancial.com — We got you
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center;margin-top:20px;font-size:12px;color:rgba(255,255,255,0.2)">
+    ScoreHaven Financial · Educational guidance only · Not licensed financial advice
+  </div>
+
+</div>
+
+<script>
+  const sections = [1, 2, 3, 4, 5];
+  const sectionNames = ['Your Info', 'Income & Expenses', 'Debt & Savings', 'Habits & Mindset', 'Financial Outlook'];
+  const formData = {};
+
+  function updateProgress(current) {
+    const steps = document.querySelectorAll('.progress-step');
+    steps.forEach((s, i) => {
+      s.className = 'progress-step';
+      if (i < current - 1) s.classList.add('done');
+      else if (i === current - 1) s.classList.add('active');
+    });
+    document.getElementById('section-label').textContent = `Section ${current} of 5`;
+    document.getElementById('section-name').textContent = sectionNames[current - 1];
+  }
+
+  function showSection(num) {
+    sections.forEach(s => {
+      document.getElementById(`section-${s}`).style.display = 'none';
+    });
+    document.getElementById(`section-${num}`).style.display = 'block';
+    updateProgress(num);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function nextSection(from) {
+    if (from === 1) {
+      const name = document.getElementById('firstName').value;
+      const email = document.getElementById('email').value;
+      const age = document.getElementById('ageRange').value;
+      if (!name || !email || !age || !formData.goal) {
+        alert('Please fill in all required fields before continuing.');
+        return;
+      }
+      formData.name = name;
+      formData.email = email;
+    }
+    if (from === 2) {
+      const income = document.getElementById('income').value;
+      const fixed = document.getElementById('fixedExp').value;
+      const variable = document.getElementById('varExp').value;
+      if (!income || !fixed || !variable || !formData.stability) {
+        alert('Please fill in all required fields before continuing.');
+        return;
+      }
+    }
+    if (from === 3) {
+      if (!formData.debt || !formData.emergency || !formData.savings || !formData.retirement) {
+        alert('Please answer all required questions before continuing.');
+        return;
+      }
+      const debtPayment = document.getElementById('debtPayment').value;
+      if (!debtPayment) {
+        alert('Please enter your monthly debt payment.');
+        return;
+      }
+    }
+    if (from === 4) {
+      if (!formData.budget || !formData.debtPct) {
+        alert('Please answer all required questions before continuing.');
+        return;
+      }
+    }
+    showSection(from + 1);
+  }
+
+  function prevSection(from) {
+    showSection(from - 1);
+  }
+
+  function selectRadio(groupId, el, key) {
+    document.querySelectorAll(`#${groupId} .radio-opt`).forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    formData[key] = el.textContent.trim();
+  }
+
+  function togglePartner(el) {
+    const field = document.getElementById('partnerIncomeField');
+    field.style.display = el.textContent.trim() === 'Yes' ? 'block' : 'none';
+  }
+
+  function updateStress() {
+    const val = document.getElementById('stressSlider').value;
+    document.getElementById('stressVal').textContent = `${val} / 10`;
+  }
+
+  function showPayment() {
+    if (!formData.networth || !formData.insurance || !formData.trigger || !formData.improv) {
+      alert('Please answer all required questions before continuing.');
+      return;
+    }
+    document.getElementById('section-4').style.display = 'none';
+    document.getElementById('payment-screen').style.display = 'block';
+    document.getElementById('summaryName').textContent = formData.name || 'friend';
+    document.querySelector('.progress-steps').innerHTML = '<div class="progress-step done"></div><div class="progress-step done"></div><div class="progress-step done"></div><div class="progress-step done"></div><div class="progress-step done"></div>';
+    document.getElementById('section-label').textContent = 'Almost done!';
+    document.getElementById('section-name').textContent = 'Payment';
+  }
+
+  function submitAndPay() {
+    const btn = document.querySelector('.btn-pay');
+    btn.textContent = '⏳ Processing...';
+    btn.style.opacity = '0.7';
+    btn.style.pointerEvents = 'none';
+    btn.style.cursor = 'not-allowed';
+    handlePayment();
+  }
+
+  function handlePayment() {
+    sessionStorage.setItem('scorehaven_client', JSON.stringify(formData));
+
+    // Helper to safely get element value
+    const val = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.value || '' : '';
+    };
+
+    // Build full payload with everything
+    const payload = {
+      _subject: 'New ScoreHaven Audit Submission — ' + (val('firstName') || 'Client'),
+      name: val('firstName'),
+      email: val('email'),
+      age_range: val('ageRange'),
+      financial_goal: formData.goal || '',
+      biggest_concern: val('concern'),
+      income_stability: formData.stability || '',
+      monthly_income: val('income'),
+      partner_income: formData.partner === 'Yes' ? val('partnerIncome') : 'No partner income',
+      fixed_expenses: val('fixedExp'),
+      variable_expenses: val('varExp'),
+      subscriptions: val('subscriptions'),
+      large_expenses_coming: formData.largeExp || '',
+      total_debt_balance: formData.debt || '',
+      monthly_debt_payment: val('debtPayment'),
+      emergency_savings: formData.emergency || '',
+      total_savings: formData.savings || '',
+      retirement_contributions: formData.retirement || '',
+      budget_habits: formData.budget || '',
+      debt_percentage_of_income: formData.debtPct || '',
+      stress_level: val('stressSlider') + ' / 10',
+      additional_info: val('extraInfo'),
+      net_worth_awareness: formData.networth || '',
+      credit_score_range: formData.credit || '',
+      insurance_coverage: formData.insurance || '',
+      spending_trigger: formData.trigger || '',
+      improvement_strategy: formData.improv || '',
+      money_upbringing: formData.upbringing || '',
+      five_year_goal: val('fiveYear'),
+      holding_back: val('holdingBack'),
+      submitted_at: new Date().toLocaleString(),
+      source: 'ScoreHaven Intake Form'
+    };
+
+    console.log('Sending to Formspree:', payload);
+
+    // Use XMLHttpRequest as backup — more reliable than fetch on mobile
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://formspree.io/f/xbdwvywv', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Accept', 'application/json');
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200 || xhr.status === 201) {
+          console.log('Formspree success:', xhr.responseText);
+        } else {
+          console.warn('Formspree error:', xhr.status, xhr.responseText);
+        }
+        // Always go to Stripe
+        window.location.href = 'https://buy.stripe.com/8x214m1xI2NR4pjc2abZe01';
+      }
+    };
+
+    xhr.onerror = function() {
+      console.warn('XHR network error - going to Stripe anyway');
+      window.location.href = 'https://buy.stripe.com/8x214m1xI2NR4pjc2abZe01';
+    };
+
+    xhr.send(JSON.stringify(payload));
+  }
+</script>
+
+<!-- HELP BAR -->
+<div style="background:#0A0F1E;border-top:1px solid rgba(255,255,255,0.06);padding:10px 24px;text-align:center;font-size:13px;color:#6B8099;position:fixed;bottom:0;left:0;right:0;z-index:999;">
+  Questions? Email us at <a href="mailto:hello@scorehavenfinancial.com" style="color:#00D68F;font-weight:600;text-decoration:none;">hello@scorehavenfinancial.com</a> &nbsp;·&nbsp; We respond within 24 hours
+</div>
+<div style="height:44px"></div>
+
+</body>
+</html>
