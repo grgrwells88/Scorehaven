@@ -1,0 +1,492 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ScoreHaven — Free Financial Personality Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #00D68F;
+    --green-dark: #00A86B;
+    --ink: #080D18;
+    --ink2: #0F1825;
+    --card: #131E2E;
+    --border: rgba(255,255,255,0.08);
+    --muted: #6B8099;
+    --white: #F0F6FF;
+    --yellow: #FFD166;
+    --red: #FF6B6B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--white); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
+  .bg-grid { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(0,214,143,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,214,143,0.025) 1px, transparent 1px); background-size: 48px 48px; }
+  .bg-glow { position: fixed; top: -300px; left: 50%; transform: translateX(-50%); width: 900px; height: 700px; background: radial-gradient(ellipse, rgba(0,214,143,0.06) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+  .wrapper { position: relative; z-index: 1; max-width: 580px; margin: 0 auto; padding: 40px 16px 80px; }
+  .brand { text-align: center; margin-bottom: 24px; }
+  .brand-name { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 18px; color: var(--white); }
+  .brand-name span { color: var(--green); }
+  .brand-tag { display: inline-block; margin-top: 6px; background: rgba(0,214,143,0.1); color: var(--green); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; border: 1px solid rgba(0,214,143,0.2); }
+  .quiz-card { background: var(--card); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; box-shadow: 0 24px 80px rgba(0,0,0,0.4); }
+  .progress-bar { height: 3px; background: rgba(255,255,255,0.06); }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--green-dark), var(--green)); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); box-shadow: 0 0 12px rgba(0,214,143,0.5); }
+  .quiz-header { padding: 24px 24px 0; display: flex; align-items: center; justify-content: space-between; }
+  .q-counter { font-size: 12px; color: var(--muted); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+  .q-counter span { color: var(--green); font-weight: 700; }
+  .question-area { padding: 20px 24px 24px; }
+  .question-text { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: clamp(17px,3vw,21px); line-height: 1.3; color: var(--white); margin-bottom: 6px; }
+  .question-sub { font-size: 12px; color: var(--muted); margin-bottom: 18px; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 13px 14px; cursor: pointer; transition: all 0.2s; font-size: 13px; color: #A8B8CC; font-weight: 400; min-height: 48px; user-select: none; -webkit-user-select: none; }
+  @media (hover: hover) { .option:hover { border-color: rgba(0,214,143,0.4); background: rgba(0,214,143,0.05); color: var(--white); } }
+  .option.selected { border-color: var(--green); background: rgba(0,214,143,0.08); color: var(--white); }
+  .option-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); flex-shrink: 0; transition: all 0.2s; }
+  .option.selected .option-dot { border-color: var(--green); background: var(--green); box-shadow: 0 0 8px rgba(0,214,143,0.5); }
+  .quiz-nav { padding: 0 24px 24px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .btn-back { background: transparent; color: var(--muted); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 18px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; min-height: 48px; }
+  .btn-back:hover { color: var(--white); }
+  .btn-next { background: var(--green); color: var(--ink); border: none; border-radius: 12px; padding: 12px 24px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; box-shadow: 0 0 20px rgba(0,214,143,0.25); opacity: 0.4; pointer-events: none; min-height: 48px; flex: 1; }
+  .btn-next.active { opacity: 1; pointer-events: all; }
+  .btn-next.active:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(0,214,143,0.4); }
+  #intro-screen { text-align: center; padding: 40px 24px; }
+  #intro-screen h1 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: clamp(26px,5vw,38px); line-height: 1.1; margin-bottom: 12px; }
+  #intro-screen h1 span { color: var(--green); }
+  #intro-screen p { color: #8A9BB5; font-size: 14px; line-height: 1.7; margin-bottom: 24px; font-weight: 300; }
+  .intro-stats { display: flex; gap: 10px; justify-content: center; margin-bottom: 24px; flex-wrap: wrap; }
+  .intro-stat { background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: #8A9BB5; display: flex; align-items: center; gap: 5px; }
+  .intro-stat strong { color: var(--white); font-weight: 600; }
+  .btn-start { display: block; width: 100%; background: var(--green); color: var(--ink); font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 15px; padding: 16px; border-radius: 14px; border: none; cursor: pointer; box-shadow: 0 0 32px rgba(0,214,143,0.3); transition: all 0.2s; min-height: 52px; }
+  .btn-start:hover { transform: translateY(-2px); }
+  .start-note { font-size: 11px; color: var(--muted); margin-top: 10px; }
+  #email-gate { display: none; padding: 36px 24px; text-align: center; }
+  #email-gate h2 { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 20px; color: var(--white); margin-bottom: 8px; line-height: 1.2; }
+  #email-gate p { font-size: 13px; color: #8A9BB5; line-height: 1.6; margin-bottom: 20px; font-weight: 300; }
+  #gate-email { width: 100%; background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 15px 18px; font-size: 16px; color: var(--white); font-family: 'DM Sans', sans-serif; outline: none; text-align: center; -webkit-appearance: none; margin-bottom: 10px; }
+  #gate-email:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(0,214,143,0.15); }
+  #gate-btn { width: 100%; background: var(--green); color: #080D18; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 15px; padding: 16px; border-radius: 14px; border: none; cursor: pointer; min-height: 52px; touch-action: manipulation; box-shadow: 0 0 24px rgba(0,214,143,0.3); }
+  #results-screen { display: none; padding: 28px 24px; }
+  .personality-card { background: linear-gradient(135deg, rgba(0,214,143,0.08), rgba(0,214,143,0.03)); border: 1px solid rgba(0,214,143,0.2); border-radius: 18px; padding: 20px; text-align: center; margin-bottom: 18px; }
+  .personality-emoji { font-size: 36px; margin-bottom: 8px; }
+  .personality-type { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 20px; color: var(--green); margin-bottom: 6px; }
+  .personality-desc { font-size: 13px; color: #A8B8CC; line-height: 1.65; }
+  .score-ring-wrap { position: relative; width: 150px; height: 150px; margin: 0 auto 16px; }
+  .score-ring-wrap svg { width: 150px; height: 150px; transform: rotate(-90deg); }
+  .ring-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 10; }
+  .ring-score { fill: none; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 440; transition: stroke-dashoffset 1.5s cubic-bezier(0.4,0,0.2,1); }
+  .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .ring-num { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 44px; line-height: 1; }
+  .ring-denom { font-size: 13px; color: var(--muted); }
+  .results-label { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 6px; text-align: center; }
+  .results-sub { font-size: 13px; color: var(--muted); line-height: 1.6; text-align: center; max-width: 300px; margin: 0 auto 20px; }
+  .cat-breakdown { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; }
+  .cat-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; }
+  .cat-name { font-size: 11px; color: #8A9BB5; margin-bottom: 4px; font-weight: 500; }
+  .cat-bar-track { height: 5px; background: rgba(255,255,255,0.06); border-radius: 100px; overflow: hidden; }
+  .cat-bar-fill { height: 100%; border-radius: 100px; transition: width 1s cubic-bezier(0.4,0,0.2,1); }
+  .cat-score-num { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 13px; text-align: right; min-width: 26px; }
+  .diagnosis-block { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+  .diagnosis-item { border-radius: 14px; padding: 14px 16px; }
+  .diagnosis-item.strength { background: rgba(0,214,143,0.06); border: 1px solid rgba(0,214,143,0.15); }
+  .diagnosis-item.warning { background: rgba(255,209,102,0.06); border: 1px solid rgba(255,209,102,0.15); }
+  .diag-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 5px; }
+  .diagnosis-item.strength .diag-label { color: var(--green); }
+  .diagnosis-item.warning .diag-label { color: var(--yellow); }
+  .diag-text { font-size: 13px; line-height: 1.6; color: var(--white); }
+  .tease-block { background: linear-gradient(135deg, rgba(0,214,143,0.06), rgba(0,214,143,0.02)); border: 1px solid rgba(0,214,143,0.15); border-radius: 18px; padding: 20px; margin-bottom: 14px; }
+  .tease-block h3 { font-family: 'Bricolage Grotesque', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .tease-block p { font-size: 12px; color: #8A9BB5; line-height: 1.65; margin-bottom: 14px; }
+  .tease-items { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+  .tease-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #A8B8CC; }
+  .tease-item::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 12px; flex-shrink: 0; }
+  .tease-item.locked { color: var(--muted); }
+  .tease-item.locked::before { content: '🔒'; font-size: 11px; }
+  .btn-cta { display: flex; align-items: center; justify-content: center; width: 100%; background: var(--green); color: #080D18; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 15px; padding: 16px; border-radius: 14px; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 24px rgba(0,214,143,0.25); min-height: 52px; touch-action: manipulation; }
+  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,214,143,0.4); }
+  .cta-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px; }
+  .help-bar { background: #0A0F1E; border-top: 1px solid rgba(255,255,255,0.06); padding: 10px 24px; text-align: center; font-size: 12px; color: #6B8099; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1; }
+  .help-bar a { color: #00D68F; font-weight: 600; text-decoration: none; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .slide-in { animation: fadeUp 0.35s ease both; }
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div class="wrapper">
+  <div class="brand">
+    <div class="brand-name">Score<span>Haven</span> Credit</div>
+    <div class="brand-tag">Free Financial Personality Quiz</div>
+  </div>
+  <div class="quiz-card">
+    <!-- INTRO -->
+    <div id="intro-screen">
+      <h1>What's really hurting<br><span>your credit score?</span></h1>
+      <p>Answer 9 quick questions and find out your Credit Clarity Report and your Financial Personality Type. Free. No email required. Takes 2 minutes.</p>
+      <div class="intro-stats">
+        <div class="intro-stat"><span>⚡</span><strong>2 min</strong> to complete</div>
+        <div class="intro-stat"><span>🎯</span><strong>Instant</strong> score</div>
+        <div class="intro-stat"><span>🔒</span><strong>No</strong> login needed</div>
+      </div>
+      <button class="btn-start" onclick="startQuiz()">Find My Financial Personality Type →</button>
+      <div class="start-note">9 questions. Instant result. Free.</div>
+    </div>
+    <!-- PROGRESS -->
+    <div class="progress-bar" id="progress-bar" style="display:none"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <!-- QUESTION HEADER -->
+    <div class="quiz-header" id="quiz-header" style="display:none">
+      <div class="q-counter">Question <span id="q-num">1</span> of 9</div>
+    </div>
+    <!-- QUESTION AREA -->
+    <div class="question-area" id="question-area" style="display:none">
+      <div class="question-text" id="q-text"></div>
+      <div class="question-sub" id="q-sub"></div>
+      <div class="options" id="options-container"></div>
+    </div>
+    <!-- NAV -->
+    <div class="quiz-nav" id="quiz-nav" style="display:none">
+      <button class="btn-back" id="btn-back" onclick="prevQuestion()">← Back</button>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Next →</button>
+    </div>
+    <!-- EMAIL GATE -->
+    <div id="email-gate">
+      <div style="font-size:40px;margin-bottom:14px">🎯</div>
+      <h2>Your Financial Personality Type is ready.</h2>
+      <p>Enter your email to see your type and what it means for your credit. We will also send you helpful tips to improve your situation.</p>
+      <input type="email" id="gate-email" placeholder="Enter your email address" onkeydown="if(event.key==='Enter')submitGateEmail()"/>
+      <button id="gate-btn" onclick="submitGateEmail()">See My Financial Personality Type →</button>
+      <!-- MailerLite hidden form to capture email into sequence -->
+      <div style="display:none">
+        <div class="ml-embedded" data-form="Va5uNw"></div>
+      </div>
+      <p style="font-size:11px;color:#3A4A5A;margin-top:10px">No spam. We respect your privacy.</p>
+    </div>
+    <!-- RESULTS -->
+    <div id="results-screen"></div>
+  </div>
+</div>
+<div class="help-bar">Questions? <a href="mailto:hello@scorehavenfinancial.com">hello@scorehavenfinancial.com</a> · We respond within 24 hours</div>
+<div style="height:44px"></div>
+
+<script>
+const questions = [
+  {
+    text: "Do you know your current credit score?",
+    sub: "Be honest — awareness is the first step to improvement.",
+    category: "awareness",
+    weight: 10,
+    options: [
+      { text: "Yes — I check it regularly", points: 10 },
+      { text: "I checked it recently but don't monitor it", points: 7 },
+      { text: "I checked it a while ago but don't know it now", points: 4 },
+      { text: "I have no idea what my credit score is", points: 1 }
+    ]
+  },
+  {
+    text: "How is your payment history?",
+    sub: "Payment history is the single biggest factor in your credit score — 35% of your FICO score.",
+    category: "payment",
+    weight: 25,
+    options: [
+      { text: "Never missed a payment — always on time", points: 25 },
+      { text: "Rarely late — maybe once or twice ever", points: 18 },
+      { text: "Sometimes late — a few times a year", points: 10 },
+      { text: "Frequently late or have missed payments recently", points: 3 }
+    ]
+  },
+  {
+    text: "How much of your available credit are you using?",
+    sub: "This is called credit utilization — it makes up 30% of your score. Under 30% is good. Under 10% is excellent.",
+    category: "utilization",
+    weight: 20,
+    options: [
+      { text: "Under 10% — I barely use my credit cards", points: 20 },
+      { text: "10 to 30% — keeping it reasonable", points: 15 },
+      { text: "30 to 60% — using a good chunk of my limit", points: 8 },
+      { text: "Over 60% or maxed out", points: 2 }
+    ]
+  },
+  {
+    text: "How long have you had credit?",
+    sub: "Length of credit history makes up 15% of your score. Older accounts help your score significantly.",
+    category: "history",
+    weight: 15,
+    options: [
+      { text: "7+ years — I've had credit for a long time", points: 15 },
+      { text: "3 to 7 years", points: 11 },
+      { text: "1 to 3 years", points: 6 },
+      { text: "Less than 1 year or just getting started", points: 2 }
+    ]
+  },
+  {
+    text: "Do you have a mix of different credit types?",
+    sub: "Credit mix makes up 10% of your score. Having a mix of credit cards, installment loans, and auto or mortgage loans helps.",
+    category: "mix",
+    weight: 10,
+    options: [
+      { text: "Yes — I have credit cards, a loan, and/or a mortgage", points: 10 },
+      { text: "Mostly credit cards only", points: 6 },
+      { text: "Just one or two accounts total", points: 4 },
+      { text: "I'm just starting out with credit", points: 2 }
+    ]
+  },
+  {
+    text: "Have you applied for new credit recently?",
+    sub: "New credit inquiries make up 10% of your score. Multiple applications in a short period can hurt your score.",
+    category: "inquiries",
+    weight: 10,
+    options: [
+      { text: "No new applications in the last year", points: 10 },
+      { text: "1 to 2 applications in the last year", points: 7 },
+      { text: "3 to 5 applications in the last 6 months", points: 4 },
+      { text: "More than 5 applications recently", points: 1 }
+    ]
+  },
+  {
+    text: "Do you have any collections, charge-offs, or bankruptcies?",
+    sub: "These are major negative items that can severely damage your credit score for years.",
+    category: "negatives",
+    weight: 5,
+    options: [
+      { text: "No — my credit report is clean", points: 5 },
+      { text: "I had some in the past but they've fallen off", points: 4 },
+      { text: "I have one collection or charge-off", points: 2 },
+      { text: "I have multiple collections, charge-offs, or a bankruptcy", points: 0 }
+    ]
+  },
+  {
+    text: "Have you ever checked your full credit report for errors?",
+    sub: "1 in 5 credit reports have errors that hurt your score. Checking and disputing errors is free and can boost your score fast.",
+    category: "monitoring",
+    weight: 3,
+    options: [
+      { text: "Yes — I review all 3 bureaus regularly", points: 3 },
+      { text: "I've checked once or twice", points: 2 },
+      { text: "Never checked my full report", points: 1 },
+      { text: "I didn't know I could do that for free", points: 0 }
+    ]
+  },
+  {
+    text: "How would you describe your relationship with credit right now?",
+    sub: "Be honest — this helps us give you the most accurate breakdown.",
+    category: "behavior",
+    weight: 2,
+    options: [
+      { text: "In control — I use credit strategically", points: 2 },
+      { text: "Getting better — I'm learning and improving", points: 1.5 },
+      { text: "It's complicated — I avoid thinking about it", points: 1 },
+      { text: "Struggling — credit causes me stress", points: 0.5 }
+    ]
+  }
+];
+
+let currentQ = 0;
+let answers = new Array(questions.length).fill(null);
+
+function startQuiz() {
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('progress-bar').style.display = 'block';
+  document.getElementById('quiz-header').style.display = 'flex';
+  document.getElementById('question-area').style.display = 'block';
+  document.getElementById('quiz-nav').style.display = 'flex';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('q-num').textContent = currentQ + 1;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-sub').textContent = q.sub;
+  document.getElementById('progress-fill').style.width = ((currentQ / questions.length) * 100) + '%';
+  document.getElementById('btn-back').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+  document.getElementById('btn-next').textContent = currentQ === questions.length - 1 ? 'See My Score →' : 'Next →';
+  const container = document.getElementById('options-container');
+  container.innerHTML = '';
+  container.classList.add('slide-in');
+  setTimeout(() => container.classList.remove('slide-in'), 400);
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'option' + (answers[currentQ] === i ? ' selected' : '');
+    div.innerHTML = '<div class="option-dot"></div><span>' + opt.text + '</span>';
+    div.onclick = () => selectOption(i);
+    container.appendChild(div);
+  });
+  updateNextBtn();
+}
+
+function selectOption(i) {
+  answers[currentQ] = i;
+  document.querySelectorAll('.option').forEach((el, idx) => el.classList.toggle('selected', idx === i));
+  updateNextBtn();
+}
+
+function updateNextBtn() {
+  const btn = document.getElementById('btn-next');
+  if (answers[currentQ] !== null) btn.classList.add('active');
+  else btn.classList.remove('active');
+}
+
+function nextQuestion() {
+  if (answers[currentQ] === null) return;
+  if (currentQ < questions.length - 1) { currentQ++; renderQuestion(); }
+  else showEmailGate();
+}
+
+function prevQuestion() {
+  if (currentQ > 0) { currentQ--; renderQuestion(); }
+}
+
+function showEmailGate() {
+  document.getElementById('progress-fill').style.width = '95%';
+  document.getElementById('quiz-header').style.display = 'none';
+  document.getElementById('question-area').style.display = 'none';
+  document.getElementById('quiz-nav').style.display = 'none';
+  const gate = document.getElementById('email-gate');
+  gate.style.display = 'block';
+  gate.classList.add('slide-in');
+  setTimeout(() => { const el = document.getElementById('gate-email'); if (el) el.focus(); }, 400);
+}
+
+function submitGateEmail() {
+  const emailInput = document.getElementById('gate-email');
+  const email = emailInput ? emailInput.value.trim() : '';
+  const btn = document.getElementById('gate-btn');
+  if (!email || !email.includes('@') || !email.includes('.')) {
+    emailInput.style.borderColor = '#FF6B6B';
+    emailInput.placeholder = 'Please enter a valid email';
+    return;
+  }
+  btn.textContent = '⏳ Finding your type...';
+  btn.style.opacity = '0.7';
+  btn.style.pointerEvents = 'none';
+
+  // Calculate score
+  let total = 0, maxTotal = 0;
+  questions.forEach((q, i) => {
+    if (answers[i] !== null) {
+      const maxPts = Math.max(...q.options.map(o => o.points));
+      total += (q.options[answers[i]].points / maxPts) * q.weight;
+    }
+    maxTotal += q.weight;
+  });
+  const score = Math.round((total / maxTotal) * 100);
+  const personality = getPersonality(score);
+
+  fetch('https://formspree.io/f/xbdwvywv', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      _subject: 'New Quiz Lead — ' + score + '/100',
+      email: email,
+      credit_personality_type: score + ' / 100',
+      credit_personality_type: personality.type,
+      source: 'Free Financial Personality Quiz',
+      submitted_at: new Date().toLocaleString()
+    })
+  }).catch(err => console.warn('Formspree error:', err)).finally(() => {
+    // Also submit to MailerLite embedded form
+    const mlForm = document.querySelector('.ml-embedded form');
+    if (mlForm) {
+      const mlInput = mlForm.querySelector('input[type="email"]');
+      if (mlInput) {
+        mlInput.value = email;
+        mlForm.submit();
+      }
+    }
+    document.getElementById('email-gate').style.display = 'none';
+    showResults();
+  });
+}
+
+function getColor(score) {
+  if (score >= 75) return '#00D68F';
+  if (score >= 50) return '#FFD166';
+  return '#FF6B6B';
+}
+
+function getLabel(score) {
+  if (score >= 85) return 'Excellent Credit Health 🏆';
+  if (score >= 70) return 'Strong Credit Foundation 💪';
+  if (score >= 55) return 'Room To Improve 📈';
+  if (score >= 40) return 'Credit Needs Attention ⚠️';
+  return 'Credit Emergency 🚨';
+}
+
+function getSub(score) {
+  if (score >= 85) return "Your credit habits are strong. A few optimizations could push you to elite status.";
+  if (score >= 70) return "Solid foundation. Targeted improvements could significantly boost your score.";
+  if (score >= 55) return "You have something to work with. The right moves now will change your trajectory fast.";
+  if (score >= 40) return "There are real gaps costing you money on every loan, card, and insurance premium.";
+  return "Your credit needs immediate attention. The good news — credit is one of the most fixable things in finance.";
+}
+
+function getPersonality(score) {
+  const paymentScore = answers[1] !== null ? (questions[1].options[answers[1]].points / 25) * 100 : 50;
+  const utilScore = answers[2] !== null ? (questions[2].options[answers[2]].points / 20) * 100 : 50;
+  const negScore = answers[6] !== null ? (questions[6].options[answers[6]].points / 5) * 100 : 50;
+
+  if (score >= 85) return { type: "Credit Architect", emoji: "🏆", desc: "You understand how credit works and use it strategically. Your score opens doors most people can't access.", risk: "Complacency — even strong credit needs regular monitoring.", opportunity: "Optimize your utilization and credit mix to push into the 800+ elite tier." };
+  if (score >= 70 && utilScore < 60) return { type: "High Utilization Builder", emoji: "💳", desc: "Your credit history is solid but your balances are quietly pulling your score down every month.", risk: "High utilization is the fastest way to lose points — and the fastest way to gain them back.", opportunity: "Paying down balances to under 30% utilization could add 20-50 points within 30-60 days." };
+  if (score >= 70) return { type: "Credit Optimizer", emoji: "📈", desc: "You're doing most things right but there are specific gaps keeping you from your potential score.", risk: "Small issues compound over time and hold back your borrowing power.", opportunity: "Targeted fixes in your weakest areas could add 30-50 points within 90 days." };
+  if (score >= 55 && paymentScore < 60) return { type: "Payment Rebuilder", emoji: "📅", desc: "Late payments are the heaviest weight on your credit score. Every on-time payment from here builds momentum.", risk: "Payment history is 35% of your score — it's the most impactful thing to fix.", opportunity: "A consistent on-time payment streak starting now will show measurable improvement within 6 months." };
+  if (score >= 55) return { type: "Credit Drifter", emoji: "💸", desc: "You have credit but aren't actively managing it. It's costing you more than you realize on every financial decision.", risk: "Drifting with credit means slow score decline and missed opportunities.", opportunity: "Simple active management habits could add 25-40 points within 90 days." };
+  if (negScore < 50) return { type: "Credit Rebuilder", emoji: "🔄", desc: "Negative items are weighing down your score but you're not starting from zero. The right plan changes things fast.", risk: "Collections and charge-offs can stay on your report for 7 years if not addressed.", opportunity: "A strategic dispute and payoff plan could see significant improvement within 3-6 months." };
+  return { type: "Credit Starter", emoji: "🚀", desc: "You're early in your credit journey. The habits you build now determine your financial options for life.", risk: "Thin credit files limit your options for loans, apartments, and even jobs.", opportunity: "Building credit the right way now creates compounding benefits for decades." };
+}
+
+function showResults() {
+  document.getElementById('progress-fill').style.width = '100%';
+  let total = 0, maxTotal = 0;
+  questions.forEach((q, i) => {
+    if (answers[i] !== null) {
+      const maxPts = Math.max(...q.options.map(o => o.points));
+      total += (q.options[answers[i]].points / maxPts) * q.weight;
+    }
+    maxTotal += q.weight;
+  });
+  const score = Math.round((total / maxTotal) * 100);
+  const personality = getPersonality(score);
+
+  const resultsEl = document.getElementById('results-screen');
+  resultsEl.style.display = 'block';
+  resultsEl.classList.add('slide-in');
+
+  resultsEl.innerHTML = `
+    <div style="text-align:center;padding:8px 0 20px">
+      <div style="font-size:12px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;font-weight:600;margin-bottom:12px">Your Financial Personality Type</div>
+      <div style="font-size:64px;margin-bottom:12px">${personality.emoji}</div>
+      <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px;color:var(--green);margin-bottom:10px">${personality.type}</div>
+      <div style="font-size:14px;color:#A8B8CC;line-height:1.7;max-width:320px;margin:0 auto 24px">${personality.desc}</div>
+    </div>
+
+    <div style="background:rgba(0,214,143,0.06);border:1px solid rgba(0,214,143,0.15);border-radius:16px;padding:20px;margin-bottom:20px">
+      <div style="font-size:11px;color:var(--green);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">What this means for you</div>
+      <div style="font-size:13px;color:#C8D8E8;line-height:1.7;margin-bottom:12px">${personality.risk}</div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:12px"></div>
+      <div style="font-size:11px;color:var(--yellow);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px">Your biggest opportunity</div>
+      <div style="font-size:13px;color:#C8D8E8;line-height:1.7">${personality.opportunity}</div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;margin-bottom:20px;text-align:center">
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:4px">This quiz shows your financial personality type.</div>
+      <div style="font-size:13px;color:var(--white);font-weight:600;line-height:1.7">Your full Credit Clarity Report goes much deeper — built personally around your exact credit situation with a real 6 month plan.</div>
+    </div>
+
+    <a href="https://scorehavenfinancial.com/intake.html" style="display:flex;align-items:center;justify-content:center;width:100%;background:var(--green);color:#080D18;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px;padding:17px;border-radius:14px;text-decoration:none;margin-bottom:10px;min-height:52px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;box-shadow:0 0 24px rgba(0,214,143,0.3);">Get My Credit Clarity Report — $27 →</a>
+    <div style="font-size:11px;color:var(--muted);text-align:center">Personally reviewed. Delivered within 24 hours. 100% Satisfaction Guarantee.</div>
+  `;
+}
+</script>
+<!-- MailerLite Universal -->
+<script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '2318370');
+</script>
+<!-- End MailerLite Universal -->
+</body>
+</html>
